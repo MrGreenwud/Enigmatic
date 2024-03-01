@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a61fd5cfaf0aa842b9b96a09e582d97, type: 3}
+  m_Name: InputMap
+  m_EditorClassIdentifier: 
+  m_InputsVec2:
+  - m_Tag: Move
+    m_AxisX:
+      m_Device: 0
+      m_InputType: 0
+      m_Gravity: 3
+      m_Dead: 0.001
+      m_Sensitivity: 3
+      m_KeyboardPosetiveButton: 100
+      m_KeyboardNegativeButton: 97
+      m_JoystickPosetiveButton: 0
+      m_JoystickNegativeButton: 0
+      m_MouseAxis: 0
+      m_JoystickAxis: 0
+    m_AxisY:
+      m_Device: 0
+      m_InputType: 0
+      m_Gravity: 3
+      m_Dead: 0.001
+      m_Sensitivity: 3
+      m_KeyboardPosetiveButton: 119
+      m_KeyboardNegativeButton: 115
+      m_JoystickPosetiveButton: 0
+      m_JoystickNegativeButton: 0
+      m_MouseAxis: 0
+      m_JoystickAxis: 0
+  m_InputsAxis: []
+  m_InputButtonDown: []
+  m_InputButtonUp: []
+  m_InputButtonPress:
+  - m_Tag: Run
+    m_KeyCode: 304

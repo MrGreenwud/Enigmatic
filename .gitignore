@@ -1,0 +1,12 @@
+#Falders
+.vs/
+Logs/
+obj/
+ProjectSettings/
+UserSettings/
+
+#Files
+.vsconfig
+Assembly-CSharp.csproj
+Enigmatic.sln
+SimpleFolderIcon.csproj

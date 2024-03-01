@@ -1,0 +1,14 @@
+InputType
+[    
+    Button
+    [        
+        Press:
+        Down:
+        Up:
+    ]    
+    Axis
+    [        
+        Value:
+        Vector2:
+    ]    
+]
