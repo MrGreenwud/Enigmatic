@@ -84,7 +84,7 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
 
         public SearchedTree[] GetAllTree()
         {
-            List<SearchedTree> trees = new List<SearchedTree>(32) { this };
+            List<SearchedTree> trees = new List<SearchedTree>(16) { this };
             
             foreach (SearchedTree tree in m_SearchedTrees)
             {
@@ -145,6 +145,8 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
 
         public void OnEnable()
         {
+            Load();
+
             SearchedTreeGUI.SelectedSearchedTreeGrup += OnSelectedGrup;
             SearchedTreeGUI.SelectedSearchedTree += OnSelectedTree;
             SearchedTreeGUI.AddedTree += OnAddedTree;
@@ -170,6 +172,8 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
                     {
                         if (GUILayout.Button("Save", GUILayout.Width(80)))
                         {
+                            STPFile.CompareAll(m_SearchedTreeGrups.ToArray());
+
                             for (int i = 0; i < m_SearchedTreeGrups.Count; i++)
                                 STPFile.Generate(m_SearchedTreeGrups[i], (uint)i);
 
@@ -177,16 +181,7 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
                         }
 
                         if (GUILayout.Button("Load", GUILayout.Width(80)))
-                        {
-                            m_SearchedTreeGrups.Clear();
-                            SearchedTreeGrup[] searchedTreeGrups = STPFile.LoadTrees();
-
-                            foreach (SearchedTreeGrup grup in searchedTreeGrups)
-                            {
-                                RegisterGrup(grup);
-                                m_SearchedTreeGrups.Add(grup);  
-                            }
-                        }
+                            Load();
 
                         GUILayout.Space(position.width / 3.5f - 90);
 
@@ -333,6 +328,18 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             EditorGUILayout.EndHorizontal();
 
             RemoveTrees();
+        }
+
+        private void Load()
+        {
+            m_SearchedTreeGrups.Clear();
+            SearchedTreeGrup[] searchedTreeGrups = STPFile.LoadTrees();
+
+            foreach (SearchedTreeGrup grup in searchedTreeGrups)
+            {
+                RegisterGrup(grup);
+                m_SearchedTreeGrups.Add(grup);
+            }
         }
 
         private void OnSelectedGrup(SearchedTreeGrup grup)

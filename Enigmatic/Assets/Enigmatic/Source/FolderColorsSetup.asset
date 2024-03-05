@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2adbc054ca76842b22ed0530ecfe53, type: 3}
+  m_Name: FolderColorsSetup
+  m_EditorClassIdentifier: 
+  m_FolderColorSettings:
+  - m_Folder: {fileID: 102900000, guid: 81fe2349b61c13c4cabb650b249f2770, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: 54ff2acf6bfc0b840a437e6bb0db1d4f, type: 3}
+  - m_Folder: {fileID: 102900000, guid: 71f1d7ce4d7838b4cb0a7499a1f55fda, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: dbf0bd780b840ce4681181ae09fcbdcb, type: 3}
+  - m_Folder: {fileID: 102900000, guid: 112499aaf8173874a91401df016dc16b, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: 6429bde3dd1c05e4c8123f71787fc84a, type: 3}
+  - m_Folder: {fileID: 102900000, guid: 94137b254503197499b942ef088880c9, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: a326854c963e0474e8598d3931ffd9e3, type: 3}
+  - m_Folder: {fileID: 102900000, guid: f68146e9609a0aa4ca67fc4b049de0f5, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: 509af1fbde5af094cb6a0f945c3a026c, type: 3}
+  - m_Folder: {fileID: 102900000, guid: 91647e983819da24483a9f725e21e212, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: 54ff2acf6bfc0b840a437e6bb0db1d4f, type: 3}
+  - m_Folder: {fileID: 102900000, guid: 5a86afd897a88ff47bac6e3ec9804097, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: bc7f31a5be39a0e4fbf79b896a35c505, type: 3}
+  - m_Folder: {fileID: 102900000, guid: 86721617ffed00f46931124f392dac62, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: 98b2629bd5eee534d84905b9ff81b3a6, type: 3}
+  - m_Folder: {fileID: 102900000, guid: df764a4f0c0743a4ebe39a5b57c3e055, type: 3}
+    m_FolderIcon: {fileID: 2800000, guid: 762682fec834bc140a2ace8620e57fb8, type: 3}

@@ -1,0 +1,9 @@
+KFInput_System : order{0} 
+[ 
+    Device
+    [ 
+        Keyboard 
+        Mouse 
+        Jostic 
+    ] 
+]

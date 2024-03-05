@@ -5,7 +5,8 @@ using EngineUtitlity.SearchedWindow;
 
 namespace KFInputSystem.Utility
 {
-    [CreateAssetMenu(fileName = "InputTypeGenerator", menuName = "Search Utility/TreeGenerator/Custom/KFInputSysyem/Keyboard", order = 0)]
+    [CreateAssetMenu(fileName = "InputTypeGenerator", 
+        menuName = "Search Utility/TreeGenerator/Custom/KFInputSysyem/Keyboard", order = 0)]
     public class KeyboardGenerator : TreeGenerator
     {
         public override void Generate()

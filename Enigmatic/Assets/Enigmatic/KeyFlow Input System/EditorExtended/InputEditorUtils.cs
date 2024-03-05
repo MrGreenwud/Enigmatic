@@ -95,9 +95,10 @@ public static class InputEditorUtils
         {
             GUILayout.Label($"{name}:");
 
-            SearchedTreeListProvider provider = ScriptableObject.CreateInstance
-                (nameof(SearchedTreeListProvider)) as SearchedTreeListProvider;
-            
+            SearchedTreeListProvider provider = ScriptableObject.CreateInstance<SearchedTreeListProvider>();
+
+            Debug.LogWarning(provider);
+
             provider.Create(searchedTreeTag, senderCode);
             provider.OnSelected += action;
 

@@ -4,6 +4,8 @@ Logs/
 obj/
 ProjectSettings/
 UserSettings/
+Library/
+Packages/
 
 #Files
 .vsconfig

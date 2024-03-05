@@ -1,5 +1,8 @@
 ﻿using UnityEditor;
 using EngineUtitlity;
+using UnityEngine;
+using UnityEditor.Experimental.GraphView;
+using Enigmatic.Experemental.SearchedWindowUtility;
 
 namespace KFInputSystem.Utility
 {
@@ -17,6 +20,14 @@ namespace KFInputSystem.Utility
             InspectorEditor.CreateButton("Apply All", map.ApplyAll);
 
             InspectorEditor.CreateButton("Edit", OpenEditor);
+
+            if (GUILayout.Button("Test"))
+            {
+                SearchedTreeListProvider provider = SearchedTreeListProvider.Create("KFInputSystem", "Input_Type");
+
+                SearchWindow.Open(new SearchWindowContext
+                    (GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), provider);
+            }
         }
 
         public void OpenEditor()

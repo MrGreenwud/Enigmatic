@@ -8,6 +8,7 @@ namespace EngineUtitlity.SearchedWindow
     public class SearchedTreeListProvider : ScriptableObject, ISearchWindowProvider
     {
         public event Action<SearchedTree, string> OnSelected;
+        
         private string m_Path;
         private string m_SenderCode;
 

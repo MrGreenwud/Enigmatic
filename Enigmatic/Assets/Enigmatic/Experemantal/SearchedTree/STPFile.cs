@@ -1,19 +1,22 @@
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Enigmatic.Experemental.SearchedWindowUtility
 {
     public static class STPFile
     {
+        public readonly static string s_Path = $"{Application.dataPath}/Enigmatic/Source/SearchedTree";
+
         private static List<string> s_STPFils = new List<string>();
-        private static string s_Path = $"{Application.dataPath}/SearchedTree/";
 
         public static void Create()
         {
             foreach (string stp in s_STPFils)
             {
-                string path = $"{s_Path}/{GetGrup(stp)}";
+                string grupName = GetGrup(stp);
+                string path = $"{s_Path}/{grupName}";
 
                 if (Directory.Exists(path) == false)
                     Directory.CreateDirectory(path);
@@ -24,44 +27,59 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             s_STPFils.Clear();
         }
 
+        public static bool TryLoadTree(string grupName, string brenchName, out string stpFile)
+        {
+            string path = $"{s_Path}/{grupName}/{brenchName}.stp";
+
+            if (File.Exists(path) == false)
+            {
+                stpFile = string.Empty;
+                return false;
+            }
+
+            StreamReader streamReader = new StreamReader(path);
+            stpFile = streamReader.ReadToEnd();
+            return true;
+        }
+
         public static SearchedTreeGrup[] LoadTrees()
         {
-            List<SearchedTreeGrup> SearchedTreeGrups = new List<SearchedTreeGrup>();
+            if(Directory.Exists(s_Path) == false)
+                Directory.CreateDirectory(s_Path);
+
+            List<SearchedTreeGrup> searchedTreeGrups = new List<SearchedTreeGrup>();
 
             string[] directores = Directory.GetDirectories(s_Path);
 
             foreach (string directory in directores)
             {
-                string[] stpFiles = Directory.GetFiles(directory);
+                string[] stpFiles = Directory.GetFiles(directory, "*.stp");
 
                 foreach (string stpFile in stpFiles)
                 {
-                    if (FileEditor.GetFileFormat(stpFile) == "stp")
+                    SearchedTreeGrup newGrup = LoadTree($"{stpFile.Replace('\\', '/')}");
+
+                    bool isContains = false;
+
+                    foreach (SearchedTreeGrup grup in searchedTreeGrups)
                     {
-                        SearchedTreeGrup newGrup = (LoadTree($"{stpFile.Replace('\\', '/')}"));
-
-                        bool isContains = false;
-
-                        foreach (SearchedTreeGrup grup in SearchedTreeGrups)
+                        if (grup.Name == newGrup.Name)
                         {
-                            if (grup.Name == newGrup.Name)
-                            {
-                                isContains = true;
+                            isContains = true;
 
-                                foreach (SearchedTree tree in newGrup.SearchedTrees)
-                                    grup.Add(tree);
+                            foreach (SearchedTree tree in newGrup.SearchedTrees)
+                                grup.Add(tree);
 
-                                break;
-                            }
+                            break;
                         }
-
-                        if (isContains == false)
-                            SearchedTreeGrups.Add(newGrup);
                     }
+
+                    if (isContains == false)
+                        searchedTreeGrups.Add(newGrup);
                 }
             }
 
-            return SearchedTreeGrups.ToArray();
+            return searchedTreeGrups.ToArray();
         }
 
         public static SearchedTreeGrup LoadTree(string path)
@@ -70,20 +88,85 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             string stp = streamReader.ReadToEnd();
 
             SearchedTreeGrup grup = new SearchedTreeGrup(GetGrup(stp));
-            List<SearchedTree> trees = LoadBrech(stp.Split("\n"), 2, out int i);
+            List<SearchedTree> trees = LoadBranch(stp.Split("\n"), 2, out int i);
             grup.Add(trees[0]);
 
-            foreach(SearchedTree tree in trees[0].GetAllTree())
+            foreach (SearchedTree tree in trees[0].GetAllTree())
                 tree.UpdateLevel();
 
+            streamReader.Close();
             return grup;
         }
 
-        private static List<SearchedTree> LoadBrech(string[] stp, int lineNumber, out int endLineNumber)
+        public static void Generate(SearchedTreeGrup grup, uint order)
+        {
+            string stp = "";
+
+            foreach (SearchedTree tree in grup.SearchedTrees)
+            {
+                stp += Generate(tree);
+                s_STPFils.Add($"{FileEditor.Replace(grup.Name, ' ', '_')} : order{{{order}}} \n[ \n{stp} \n]");
+                stp = "";
+            }
+        }
+
+        public static void CompareAll(SearchedTreeGrup[] grups)
+        {
+            if(Directory.Exists(s_Path) == false)
+                Directory.CreateDirectory(s_Path);
+
+            List<string> directores = Directory.GetDirectories(s_Path).ToList();
+            List<string> existDirectores = new List<string>(directores.Count);
+
+            foreach (SearchedTreeGrup grup in grups)
+            {
+                foreach (string directory in directores)
+                {
+                    if (grup.Name == Path.GetDirectoryName(directory))
+                    {
+                        directores.Remove(directory);
+                        existDirectores.Add(directory);
+                        break;
+                    }
+                }
+            }
+
+            foreach (string directory in directores)
+                Directory.Delete(directory, true);
+
+            foreach (string directory in existDirectores)
+            {
+                string[] path = directory.Split('/');
+                string grupName = path[path.Length - 1];
+
+                List<string> stpFiles = Directory.GetFiles(directory, "*.stp").ToList();
+
+                foreach (SearchedTreeGrup grup in grups)
+                {
+                    foreach (SearchedTree tree in grup.SearchedTrees)
+                    {
+                        foreach (string stpFile in stpFiles)
+                        {
+                            if (tree.Value.Replace(" ", string.Empty) 
+                                == Path.GetFileNameWithoutExtension(stpFile).Replace("_", string.Empty))
+                            {
+                                stpFiles.Remove(stpFile);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                foreach(string file in stpFiles)
+                    File.Delete(file);
+            }
+        }
+
+        private static List<SearchedTree> LoadBranch(string[] stp, int lineNumber, out int endLineNumber)
         {
             List<SearchedTree> searchedTrees = new List<SearchedTree>();
 
-            for(int i = lineNumber; i < stp.Length; i++)
+            for (int i = lineNumber; i < stp.Length; i++)
             {
                 string line = stp[i].Replace(" ", string.Empty).Replace('_', ' ');
 
@@ -93,7 +176,7 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
                     {
                         List<SearchedTree> children = new List<SearchedTree>();
 
-                        children = LoadBrech(stp, i + 1, out i);
+                        children = LoadBranch(stp, i + 1, out i);
 
                         foreach (SearchedTree child in children)
                             searchedTrees[searchedTrees.Count - 1].AddChild(child);
@@ -114,20 +197,6 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             return null;
         }
 
-        public static void Generate(SearchedTreeGrup grup, uint order)
-        {
-            string stp = "";
-
-            foreach (SearchedTree tree in grup.SearchedTrees)
-            {
-                stp += Generate(tree);
-                s_STPFils.Add($"{grup.Name} : order{{{order}}} \n[ \n{stp} \n]");
-                stp = "";
-            }
-
-            Debug.Log(s_STPFils[0]);
-        }
-
         private static string Generate(SearchedTree searchedTree)
         {
             string st = "";
@@ -140,7 +209,7 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             if (children.Length != 0)
             {
                 st += $"\n{FileEditor.Space(searchedTree.Level + 1)}";
-                
+
                 st += $"[ \n";
 
                 foreach (SearchedTree child in children)
@@ -157,7 +226,7 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
         private static string GetGrup(string stpFile)
         {
             string[] stp = stpFile.Split("\n");
-            string[] firtLine = stp[0].Split(' ');
+            string[] firtLine = FileEditor.Replace(stp[0], '_', ' ').Split(' ');
 
             string grup = "";
 
@@ -167,9 +236,23 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
                     break;
 
                 grup += word;
+                grup += ' ';
             }
 
             return grup;
+        }
+
+        private static int GetOrder(string stpFile)
+        {
+            string[] stp = stpFile.Split("\n");
+
+            foreach (char symbol in stp[0])
+            {
+                if (int.TryParse(symbol.ToString(), out int oder) == true)
+                    return oder;
+            }
+
+            throw new System.InvalidOperationException();
         }
 
         private static string GetBranch(string stpFile)
@@ -178,8 +261,6 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             string branch = stp.Length >= 4 ? stp[2] : "";
             return branch.Replace(" ", string.Empty);
         }
-
-        
     }
 }
 
@@ -190,9 +271,9 @@ public static class FileEditor
     {
         string indent = "";
 
-            for (uint i = 0; i < depthLevel; i++)
-                indent += "    ";
-        
+        for (uint i = 0; i < depthLevel; i++)
+            indent += "    ";
+
         return indent;
     }
 
@@ -202,7 +283,7 @@ public static class FileEditor
 
         for (int i = 0; i < value.Length; i++)
         {
-            if (i != 0)
+            if (i != 0 && i + 1 < value.Length)
             {
                 if (value[i - 1] != oldChar && value[i] == oldChar && value[i + 1] != oldChar)
                 {
@@ -223,6 +304,15 @@ public static class FileEditor
     public static string GetFileFormat(string file)
     {
         return file.Split('.')[file.Split('.').Length - 1];
+    }
+
+    public static string ReadFile(string path)
+    {
+        StreamReader streamReader = new StreamReader(path);
+        string file = streamReader.ReadToEnd();
+        streamReader.Close();
+
+        return file;
     }
 }
 

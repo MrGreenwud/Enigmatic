@@ -26,12 +26,7 @@ public static class CustomIcon
             return;
 
         string fileFormat = FileEditor.GetFileFormat(file);
-        Debug.Log(fileFormat);
-        //Debug.Log(s_Icons[fileFormat]);
-
-        //if (s_Icons.ContainsKey(fileFormat) == false) 
-        //    return;
-
+        
         Rect imageRect;
 
         if (rect.height > 20)

@@ -1,0 +1,467 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7650230301281432010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f045891d717df5645aa4d20ab6fc1f3b, type: 3}
+  m_Name: State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -888, y: -616}
+  ports:
+    keys:
+    - states
+    - state
+    - states 0
+    - states 1
+    - states 2
+    - states 3
+    values:
+    - _fieldName: states
+      _node: {fileID: -7650230301281432010}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: state
+      _node: {fileID: -7650230301281432010}
+      _typeQualifiedName: Enigmatic.DynamicStateSystem.State, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: states 1
+        node: {fileID: -4424807695213855621}
+        reroutePoints: []
+      - fieldName: states 0
+        node: {fileID: -3458519358433286075}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: states 0
+      _node: {fileID: -7650230301281432010}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -4424807695213855621}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: states 1
+      _node: {fileID: -7650230301281432010}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -3458519358433286075}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: states 2
+      _node: {fileID: -7650230301281432010}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: 6285853200193202746}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: states 3
+      _node: {fileID: -7650230301281432010}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -3151538760796999175}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  states: []
+--- !u!114 &-4424807695213855621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f045891d717df5645aa4d20ab6fc1f3b, type: 3}
+  m_Name: State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -536, y: -728}
+  ports:
+    keys:
+    - states
+    - state
+    - states 0
+    - states 1
+    - states 2
+    values:
+    - _fieldName: states
+      _node: {fileID: -4424807695213855621}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: state
+      _node: {fileID: -4424807695213855621}
+      _typeQualifiedName: Enigmatic.DynamicStateSystem.State, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: states 0
+        node: {fileID: 6285853200193202746}
+        reroutePoints: []
+      - fieldName: states 0
+        node: {fileID: -7650230301281432010}
+        reroutePoints:
+        - {x: -256, y: -592}
+        - {x: -256, y: -816}
+        - {x: -960, y: -816}
+        - {x: -960, y: -608}
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: states 0
+      _node: {fileID: -4424807695213855621}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -3458519358433286075}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: states 1
+      _node: {fileID: -4424807695213855621}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -7650230301281432010}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: states 2
+      _node: {fileID: -4424807695213855621}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -3151538760796999175}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  states: []
+--- !u!114 &-3458519358433286075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f045891d717df5645aa4d20ab6fc1f3b, type: 3}
+  m_Name: State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -536, y: -536}
+  ports:
+    keys:
+    - states
+    - state
+    - states 0
+    - states 1
+    values:
+    - _fieldName: states
+      _node: {fileID: -3458519358433286075}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: state
+      _node: {fileID: -3458519358433286075}
+      _typeQualifiedName: Enigmatic.DynamicStateSystem.State, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: states 1
+        node: {fileID: 6285853200193202746}
+        reroutePoints: []
+      - fieldName: states 0
+        node: {fileID: -4424807695213855621}
+        reroutePoints:
+        - {x: -240, y: -400}
+        - {x: -240, y: -784}
+        - {x: -608, y: -784}
+        - {x: -608, y: -720}
+      - fieldName: states 1
+        node: {fileID: -7650230301281432010}
+        reroutePoints:
+        - {x: -240, y: -400}
+        - {x: -240, y: -208}
+        - {x: -960, y: -208}
+        - {x: -960, y: -464}
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: states 0
+      _node: {fileID: -3458519358433286075}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -7650230301281432010}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: states 1
+      _node: {fileID: -3458519358433286075}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: 6285853200193202746}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  states: []
+--- !u!114 &-3151538760796999175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f045891d717df5645aa4d20ab6fc1f3b, type: 3}
+  m_Name: State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 152, y: -632}
+  ports:
+    keys:
+    - states
+    - state
+    - states 0
+    values:
+    - _fieldName: states
+      _node: {fileID: -3151538760796999175}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: state
+      _node: {fileID: -3151538760796999175}
+      _typeQualifiedName: Enigmatic.DynamicStateSystem.State, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: states 2
+        node: {fileID: 6285853200193202746}
+        reroutePoints:
+        - {x: 480, y: -480}
+        - {x: 480, y: -144}
+        - {x: -240, y: -144}
+        - {x: -240, y: -448}
+      - fieldName: states 2
+        node: {fileID: -4424807695213855621}
+        reroutePoints:
+        - {x: 480, y: -560}
+        - {x: 496, y: -832}
+        - {x: -672, y: -832}
+        - {x: -672, y: -688}
+      - fieldName: states 3
+        node: {fileID: -7650230301281432010}
+        reroutePoints:
+        - {x: 592, y: -512}
+        - {x: 592, y: -16}
+        - {x: -1056, y: -16}
+        - {x: -1056, y: -368}
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: states 0
+      _node: {fileID: -3151538760796999175}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: 6285853200193202746}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  states: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97a75c321a7310e46a99405aa6d1c49b, type: 3}
+  m_Name: DynamicStateGraph
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: -4424807695213855621}
+  - {fileID: -7650230301281432010}
+  - {fileID: 6285853200193202746}
+  - {fileID: -3458519358433286075}
+  - {fileID: -3151538760796999175}
+--- !u!114 &6285853200193202746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f045891d717df5645aa4d20ab6fc1f3b, type: 3}
+  m_Name: State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -200, y: -632}
+  ports:
+    keys:
+    - states
+    - state
+    - states 0
+    - states 1
+    - states 2
+    values:
+    - _fieldName: states
+      _node: {fileID: 6285853200193202746}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: state
+      _node: {fileID: 6285853200193202746}
+      _typeQualifiedName: Enigmatic.DynamicStateSystem.State, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: states 1
+        node: {fileID: -3458519358433286075}
+        reroutePoints:
+        - {x: 96, y: -480}
+        - {x: 96, y: -304}
+        - {x: -544, y: -304}
+      - fieldName: states 2
+        node: {fileID: -7650230301281432010}
+        reroutePoints:
+        - {x: 96, y: -592}
+        - {x: 96, y: -896}
+        - {x: -1056, y: -896}
+        - {x: -1056, y: -512}
+      - fieldName: states 0
+        node: {fileID: -3151538760796999175}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: states 0
+      _node: {fileID: 6285853200193202746}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -4424807695213855621}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: states 1
+      _node: {fileID: 6285853200193202746}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -3458519358433286075}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+    - _fieldName: states 2
+      _node: {fileID: 6285853200193202746}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: state
+        node: {fileID: -3151538760796999175}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 1
+  states: []
