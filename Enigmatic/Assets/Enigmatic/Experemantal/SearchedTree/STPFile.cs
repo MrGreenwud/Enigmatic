@@ -11,7 +11,59 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
 
         private static List<string> s_STPFils = new List<string>();
 
-        public static void Create()
+        public static void CompareAll(SearchedTreeGrup[] grups)
+        {
+            if (Directory.Exists(s_Path) == false)
+                Directory.CreateDirectory(s_Path);
+
+            List<string> directores = Directory.GetDirectories(s_Path).ToList();
+            List<string> existDirectores = new List<string>(directores.Count);
+
+            foreach (SearchedTreeGrup grup in grups)
+            {
+                foreach (string directory in directores)
+                {
+                    if (grup.Name == Path.GetDirectoryName(directory))
+                    {
+                        directores.Remove(directory);
+                        existDirectores.Add(directory);
+                        break;
+                    }
+                }
+            }
+
+            foreach (string directory in directores)
+                Directory.Delete(directory, true);
+
+            foreach (string directory in existDirectores)
+            {
+                string[] path = directory.Split('/');
+                string grupName = path[path.Length - 1];
+
+                List<string> stpFiles = Directory.GetFiles(directory, "*.stp").ToList();
+
+                foreach (SearchedTreeGrup grup in grups)
+                {
+                    foreach (SearchedTree tree in grup.SearchedTrees)
+                    {
+                        foreach (string stpFile in stpFiles)
+                        {
+                            if (tree.Value.Replace(" ", string.Empty)
+                                == Path.GetFileNameWithoutExtension(stpFile).Replace("_", string.Empty))
+                            {
+                                stpFiles.Remove(stpFile);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                foreach (string file in stpFiles)
+                    File.Delete(file);
+            }
+        }
+
+        public static void Save()
         {
             foreach (string stp in s_STPFils)
             {
@@ -98,70 +150,6 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             return grup;
         }
 
-        public static void Generate(SearchedTreeGrup grup, uint order)
-        {
-            string stp = "";
-
-            foreach (SearchedTree tree in grup.SearchedTrees)
-            {
-                stp += Generate(tree);
-                s_STPFils.Add($"{FileEditor.Replace(grup.Name, ' ', '_')} : order{{{order}}} \n[ \n{stp} \n]");
-                stp = "";
-            }
-        }
-
-        public static void CompareAll(SearchedTreeGrup[] grups)
-        {
-            if(Directory.Exists(s_Path) == false)
-                Directory.CreateDirectory(s_Path);
-
-            List<string> directores = Directory.GetDirectories(s_Path).ToList();
-            List<string> existDirectores = new List<string>(directores.Count);
-
-            foreach (SearchedTreeGrup grup in grups)
-            {
-                foreach (string directory in directores)
-                {
-                    if (grup.Name == Path.GetDirectoryName(directory))
-                    {
-                        directores.Remove(directory);
-                        existDirectores.Add(directory);
-                        break;
-                    }
-                }
-            }
-
-            foreach (string directory in directores)
-                Directory.Delete(directory, true);
-
-            foreach (string directory in existDirectores)
-            {
-                string[] path = directory.Split('/');
-                string grupName = path[path.Length - 1];
-
-                List<string> stpFiles = Directory.GetFiles(directory, "*.stp").ToList();
-
-                foreach (SearchedTreeGrup grup in grups)
-                {
-                    foreach (SearchedTree tree in grup.SearchedTrees)
-                    {
-                        foreach (string stpFile in stpFiles)
-                        {
-                            if (tree.Value.Replace(" ", string.Empty) 
-                                == Path.GetFileNameWithoutExtension(stpFile).Replace("_", string.Empty))
-                            {
-                                stpFiles.Remove(stpFile);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                foreach(string file in stpFiles)
-                    File.Delete(file);
-            }
-        }
-
         private static List<SearchedTree> LoadBranch(string[] stp, int lineNumber, out int endLineNumber)
         {
             List<SearchedTree> searchedTrees = new List<SearchedTree>();
@@ -195,6 +183,18 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
 
             endLineNumber = 0;
             return null;
+        }
+
+        public static void Generate(SearchedTreeGrup grup, uint order)
+        {
+            string stp = "";
+
+            foreach (SearchedTree tree in grup.SearchedTrees)
+            {
+                stp += Generate(tree);
+                s_STPFils.Add($"{FileEditor.Replace(grup.Name, ' ', '_')} : order{{{order}}} \n[ \n{stp} \n]");
+                stp = "";
+            }
         }
 
         private static string Generate(SearchedTree searchedTree)

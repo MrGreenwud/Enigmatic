@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Enigmatic.DynamicStateSystem
 {
-    [Serializable]
     public class State
     {
         public StateMachine StateMachine { get; private set; }

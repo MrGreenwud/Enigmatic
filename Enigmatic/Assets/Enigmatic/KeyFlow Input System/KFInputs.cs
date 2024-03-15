@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace KFInputSystem
+namespace Enigmatic.KFInputSystem
 {
     public class KFInput<T>
     {
@@ -11,6 +11,11 @@ namespace KFInputSystem
 
         public string Tag => m_Tag;
         public T Value { get; protected set; }
+
+        public KFInput(string tag) 
+        {
+            m_Tag = tag;
+        }
         
         public virtual void OnAction() => Action?.Invoke();
     }
@@ -21,7 +26,7 @@ namespace KFInputSystem
 
         public KeyCode KeyCode => m_KeyCode;
 
-        public KFInputButton(KeyCode keyCode)
+        public KFInputButton(string tag, KeyCode keyCode) : base(tag)
         {
             m_KeyCode = keyCode;
         }
@@ -36,11 +41,7 @@ namespace KFInputSystem
     [Serializable]
     public class KFInputVec2 : KFInput<Vector2>
     {
-        [SerializeField] private Axis m_AxisX;
-        [SerializeField] private Axis m_AxisY;
-
-        public Axis AxisX => m_AxisX;
-        public Axis AxisY => m_AxisY;
+        public KFInputVec2(string tag) : base(tag) { }
 
         public override void OnAction()
         {
@@ -57,16 +58,11 @@ namespace KFInputSystem
     [Serializable]
     public class KFInputAxis : KFInput<float>
     {
-        [SerializeField] private string m_Axis;
-
-        public KFInputAxis(string axis)
-        {
-            m_Axis = axis;
-        }
+        public KFInputAxis(string tag) : base (tag) { }
 
         public override void OnAction()
         {
-            Value = Input.GetAxis(m_Axis);
+            Value = Input.GetAxis(Tag);
 
             if (Value != 0)
                 base.OnAction();
@@ -76,7 +72,7 @@ namespace KFInputSystem
     [Serializable]
     public class KFInputButtonDown : KFInputButton
     {
-        public KFInputButtonDown(KeyCode keyCode) : base(keyCode) { }
+        public KFInputButtonDown(string tag, KeyCode keyCode) : base(tag, keyCode) { }
 
         public override void OnAction()
         {
@@ -88,7 +84,7 @@ namespace KFInputSystem
     [Serializable]
     public class KFInputButtonUp : KFInputButton
     {
-        public KFInputButtonUp(KeyCode keyCode) : base(keyCode) { }
+        public KFInputButtonUp(string tag, KeyCode keyCode) : base(tag, keyCode) { }
 
         public override void OnAction()
         {
@@ -100,7 +96,7 @@ namespace KFInputSystem
     [Serializable]
     public class KFInputButtonPress : KFInputButton
     {
-        public KFInputButtonPress(KeyCode keyCode) : base(keyCode) { }
+        public KFInputButtonPress(string tag, KeyCode keyCode) : base(tag, keyCode) { }
 
         public override void OnAction()
         {

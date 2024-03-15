@@ -1,5 +1,43 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7844600758263997396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f045891d717df5645aa4d20ab6fc1f3b, type: 3}
+  m_Name: State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 40, y: -200}
+  ports:
+    keys:
+    - states
+    - state
+    values:
+    - _fieldName: states
+      _node: {fileID: -7844600758263997396}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: state
+      _node: {fileID: -7844600758263997396}
+      _typeQualifiedName: Enigmatic.DynamicStateSystem.State, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
 --- !u!114 &-7650230301281432010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,7 +138,6 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  states: []
 --- !u!114 &-4424807695213855621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,7 +228,6 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  states: []
 --- !u!114 &-3458519358433286075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +311,6 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  states: []
 --- !u!114 &-3151538760796999175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,7 +384,44 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  states: []
+--- !u!114 &-455579029424753370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f045891d717df5645aa4d20ab6fc1f3b, type: 3}
+  m_Name: State
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -280, y: -216}
+  ports:
+    keys:
+    - states
+    - state
+    values:
+    - _fieldName: states
+      _node: {fileID: -455579029424753370}
+      _typeQualifiedName: System.Collections.Generic.List`1[[Enigmatic.DynamicStateSystem.State,
+        Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
+        mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: state
+      _node: {fileID: -455579029424753370}
+      _typeQualifiedName: Enigmatic.DynamicStateSystem.State, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,6 +440,8 @@ MonoBehaviour:
   - {fileID: 6285853200193202746}
   - {fileID: -3458519358433286075}
   - {fileID: -3151538760796999175}
+  - {fileID: -455579029424753370}
+  - {fileID: -7844600758263997396}
 --- !u!114 &6285853200193202746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,4 +538,3 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 1
-  states: []

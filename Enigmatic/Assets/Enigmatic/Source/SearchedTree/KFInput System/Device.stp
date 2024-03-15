@@ -4,6 +4,6 @@ KFInput_System : order{0}
     [ 
         Keyboard 
         Mouse 
-        Jostic 
+        Joystick 
     ] 
 ]

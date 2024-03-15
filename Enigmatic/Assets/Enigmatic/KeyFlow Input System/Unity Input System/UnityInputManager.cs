@@ -34,7 +34,7 @@ namespace KFInputSystem.Utility
         public static void Clear()
         {
             SerializedObject inputManager = new SerializedObject
-            (AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0]);
+                (AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0]);
 
             SerializedProperty axesProperty = inputManager.FindProperty("m_Axes");
             axesProperty.ClearArray();

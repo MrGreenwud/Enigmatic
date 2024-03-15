@@ -1,35 +1,75 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
-using EngineUtitlity.SearchedWindow;
+using KFInputSystem.Utility;
+using Enigmatic.KFInputSystem;
+using Enigmatic.Experemental.SearchedWindowUtility;
+using Enigmatic.Experemental.CodeLiteGen;
+using System;
+
+public static class EnigmaticData
+{
+    public static readonly string resources = $"Resources/Enigmatic";
+    public static readonly string source = $"Enigmatic/Source";
+
+    //Input
+    public static readonly string inputStorege = $"{resources}/KFInput";
+    public static readonly string inputProviders = $"{inputStorege}/Providers";
+    public static readonly string inputMaps = $"{inputStorege}/Maps";
+
+    //SearchedTree
+    public static readonly string enigmaticTree = $"{source}/SearchedTree";
+    public static readonly string treeStorege = $"{resources}/SearchedTree";
+
+    public static string GetFullPath(string path) => $"{Application.dataPath}/{path}";
+    public static string GetUnityPath(string path) => $"Asset/{path}";
+}
 
 #if UNITY_EDITOR
+
 public class InputEditorWindow : EditorWindow
 {
-    private List<KFInput> m_KFInputs = new List<KFInput>();
-    private KFInput m_SelectionKFInput;
-
-    private KFInput m_TempInput = new KFInput("");
-
-    private Vector2 m_ScrollPosition;
+    private static readonly string s_ProvidersPath = $"{EnigmaticData.inputStorege}/Providers";
     private static bool s_IsAutoSave;
 
-    private bool m_IsOpenAxisX;
-    private bool m_IsOpenAxisY;
+    private List<KFInputGrup> m_KFGrups = new List<KFInputGrup>();
 
+    private EditorKFInput m_SelectionKFInput;
+    private KFInputGrup m_SelectionGrup;
+
+    private Vector2 m_ScrollPositionGrup;
+    private Vector2 m_ScrollPositionInput;
+    
+    [MenuItem("Tools/Enigmatic/KFInput")]
     public static void Open()
     {
         InputEditorWindow window = GetWindow<InputEditorWindow>();
-        window.titleContent = new GUIContent("Input Editor");
+        window.titleContent = new GUIContent("KFInput Editor");
+        
         window.minSize = new Vector2(797, 490);
+        window.maxSize = new Vector2(797, 490);
+    }
+
+    private void OnEnable()
+    {
+        m_KFGrups = KFIMFile.Load();
     }
 
     private void OnGUI()
     {
         EditorGUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true));
         {
-            if (GUILayout.Button("Save", GUILayout.Width(75))) { }
-            if (GUILayout.Button("Apply", GUILayout.Width(75))) { }
+            if (GUILayout.Button("Save", GUILayout.Width(75)))
+            {
+                foreach (KFInputGrup grup in m_KFGrups)
+                    KFIMFile.Genetate(grup);
+
+                KFIMFile.Save();
+            }
+
+            if (GUILayout.Button("Apply", GUILayout.Width(75)))
+                Apply();
 
             //797 - 540 = 257
             GUILayout.Space(position.width - 257);
@@ -45,21 +85,24 @@ public class InputEditorWindow : EditorWindow
 
         EditorGUILayout.BeginHorizontal();
         {
-            EditorGUILayout.BeginVertical("box", GUILayout.MaxWidth(250),
+            //Grups List
+            EditorGUILayout.BeginVertical("box", GUILayout.MaxWidth(200),
                 GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             {
                 EditorGUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true));
                 {
-                    GUILayout.Label("Inputs", EditorStyles.boldLabel);
+                    GUILayout.Label("Grups", EditorStyles.boldLabel);
 
                     if (GUILayout.Button("+", GUILayout.Width(20)))
-                        m_KFInputs.Add(new KFInput("New Input"));
+                        m_KFGrups.Add(new KFInputGrup("New Grup"));
 
-                    EditorGUI.BeginDisabledGroup(m_SelectionKFInput == null);
-                    if (GUILayout.Button("-", GUILayout.Width(20)))
+                    EditorGUI.BeginDisabledGroup(m_SelectionGrup == null);
                     {
-                        m_KFInputs.Remove(m_SelectionKFInput);
-                        m_SelectionKFInput = null;
+                        if (GUILayout.Button("-", GUILayout.Width(20)))
+                        {
+                            m_KFGrups.Remove(m_SelectionGrup);
+                            m_SelectionGrup = null;
+                        }
                     }
                     EditorGUI.EndDisabledGroup();
                 }
@@ -67,30 +110,92 @@ public class InputEditorWindow : EditorWindow
 
                 EditorGUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
                 {
-                    m_ScrollPosition = GUILayout.BeginScrollView(m_ScrollPosition);
+                    m_ScrollPositionGrup = GUILayout.BeginScrollView(m_ScrollPositionGrup);
 
-                    DrowInputList();
+                    DrawGrupList();
 
                     GUILayout.EndScrollView();
-                }
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true));
-                {
-                    if (GUILayout.Button("Clear"))
-                        m_KFInputs.Clear();
                 }
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
 
-            ///Settings 
-            EditorGUILayout.BeginVertical("box",
+            //Input List
+            EditorGUILayout.BeginVertical("box", GUILayout.MaxWidth(250),
                 GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             {
                 EditorGUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true));
                 {
-                    GUILayout.Label("Settings", EditorStyles.boldLabel);
+                    GUILayout.Label("Inputs", EditorStyles.boldLabel);
+
+                    if (m_SelectionGrup != null)
+                    {
+                        if (GUILayout.Button("+", GUILayout.Width(20)))
+                            m_SelectionGrup.Add(new EditorKFInput("New Input"));
+
+                        EditorGUI.BeginDisabledGroup(m_SelectionKFInput == null);
+                        {
+                            if (GUILayout.Button("-", GUILayout.Width(20)))
+                            {
+                                m_SelectionGrup.Remove(m_SelectionKFInput);
+                                m_SelectionKFInput = null;
+                            }
+                        }
+                        EditorGUI.EndDisabledGroup();
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+                {
+                    if (m_SelectionGrup != null)
+                    {
+                        m_ScrollPositionInput = GUILayout.BeginScrollView(m_ScrollPositionInput);
+
+                        DrawInputList();
+
+                        GUILayout.EndScrollView();
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+
+                if (m_SelectionGrup != null)
+                {
+                    EditorGUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true));
+                    {
+                        if (GUILayout.Button("Clear"))
+                            m_SelectionGrup.Clear();
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+            EditorGUILayout.EndVertical();
+
+            ///Settings 
+            EditorGUILayout.BeginVertical("box", GUILayout.Width(797 - 200 - 250),
+                GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+            {
+                EditorGUILayout.BeginHorizontal("box", GUILayout.ExpandWidth(true));
+                {
+                    EditorGUILayout.BeginVertical(GUILayout.Width(797 / 6));
+                    {
+                        GUILayout.Label("Settings:", EditorStyles.boldLabel);
+                    }
+                    EditorGUILayout.EndVertical();
+
+                    EditorGUILayout.BeginVertical();
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        {
+                            if (m_SelectionGrup != null)
+                            {
+                                GUILayout.Label("Grup Name:");
+                                m_SelectionGrup.Name = EditorGUILayout.TextField(m_SelectionGrup.Name);
+                            }
+                        }
+                        EditorGUILayout.EndHorizontal();
+                    }
+                    EditorGUILayout.EndVertical();
                 }
                 EditorGUILayout.EndHorizontal();
 
@@ -99,60 +204,75 @@ public class InputEditorWindow : EditorWindow
                 {
                     if (m_SelectionKFInput != null)
                     {
-                        m_TempInput.Tag = EditorGUILayout.TextField("Tag:", m_TempInput.Tag);
-
-                        EditorGUILayout.Space(3);
-
-                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.BeginVertical("box");
                         {
-                            InputEditorUtils.DrowSelectableElement
-                                ("Type", TreeTags.InputType.ToString(), "type", OnSelectValue, m_SelectionKFInput.Type);
+                            m_SelectionKFInput.Tag = EditorGUILayout.TextField("Tag:", m_SelectionKFInput.Tag);
+
+                            EditorGUILayout.Space(3);
+
+                            EditorGUILayout.BeginHorizontal();
+                            {
+                                SearchedTreeListProvider provider = SearchedTreeListProvider.Create("KFInput_System", "Input_Type", "type");
+                                provider.OnSelected += OnSelectValue;
+                                SearchedTreeUtility.DrawSelectionTree("Type", m_SelectionKFInput.Type, provider);
+                            }
+                            EditorGUILayout.EndHorizontal();
+
+                            EditorGUILayout.Space(3);
+
+                            EditorGUILayout.BeginHorizontal();
+                            {
+                                SearchedTreeListProvider provider = SearchedTreeListProvider.Create("KFInput_System", "Device", "device");
+                                provider.OnSelected += OnSelectValue;
+                                SearchedTreeUtility.DrawSelectionTree("Device", m_SelectionKFInput.Device, provider);
+                            }
+                            EditorGUILayout.EndHorizontal();
+
+                            EditorGUILayout.Space(3);
                         }
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.Space(3);
-
-                        EditorGUILayout.BeginHorizontal();
-                        {
-                            InputEditorUtils.DrowSelectableElement
-                                ("Device", TreeTags.Device.ToString(), "device", OnSelectValue, m_SelectionKFInput.Device);
-                        }
-                        EditorGUILayout.EndHorizontal();
-
-                        EditorGUILayout.Space(3);
+                        EditorGUILayout.EndVertical();
 
                         EditorGUILayout.BeginVertical("box");
                         {
-                            if (m_TempInput.Device != "None")
+                            if (SearchedTreeUtility.DeCompileTree(m_SelectionKFInput.Type, 0) == "Axis")
                             {
-                                if (SearchedTree.GetAncestor(m_TempInput.Type)[0] == "Button")
+                                m_SelectionKFInput.Gravity = EditorGUILayout.FloatField("Gravity", m_SelectionKFInput.Gravity);
+                                m_SelectionKFInput.Dead = EditorGUILayout.FloatField("Dead", m_SelectionKFInput.Dead);
+                                m_SelectionKFInput.Sensitivity = EditorGUILayout.FloatField("Sensitivity", m_SelectionKFInput.Sensitivity);
+
+                                GUILayout.Space(10);
+                            }
+                        }
+                        EditorGUILayout.EndVertical();
+
+                        EditorGUILayout.BeginVertical("box");
+                        {
+                            if (m_SelectionKFInput.Device != "None")
+                            {
+                                if (SearchedTreeUtility.DeCompileTree(m_SelectionKFInput.Type, 0) == "Button")
                                 {
-                                    InputEditorUtils.DrowButton("Button", OnSelectValue,
-                                        m_TempInput.Button, m_TempInput.Device, "button");
+                                    SearchedTreeListProvider provider = SearchedTreeListProvider.Create("KFInput_System", $"{m_SelectionKFInput.Device}Button", "button");
+                                    provider.OnSelected += OnSelectValue;
+                                    SearchedTreeUtility.DrawSelectionTree("Button", m_SelectionKFInput.Button, provider);
                                 }
-                                else if (SearchedTree.GetAncestor(m_TempInput.Type)[0] == "Axis")
+                                else if (SearchedTreeUtility.DeCompileTree(m_SelectionKFInput.Type, 0) == "Axis")
                                 {
-                                    if (SearchedTree.GetAncestor(m_TempInput.Type)[1] == "Float")
-                                    {
-                                        InputEditorUtils.DrowAxis("Axis", m_TempInput.AxisX, m_TempInput.Device,
-                                            OnSelectValue, "AxisX", ref m_IsOpenAxisX);
-                                    }
+                                    if (m_SelectionKFInput.Device == "Keyboard")
+                                        DrawAxisKeyboard("AxisX", m_SelectionKFInput.AxisX, "AxisX");
                                     else
+                                        DrawAxisJosticOrMouse("AxisX", m_SelectionKFInput.AxisX, "AxisX");
+
+                                    if(SearchedTreeUtility.DeCompileTree(m_SelectionKFInput.Type, 1) == "Vector2")
                                     {
-                                        InputEditorUtils.DrowAxis("AxisX", m_TempInput.AxisX, m_TempInput.Device,
-                                            OnSelectValue, "AxisX", ref m_IsOpenAxisX);
-
-                                        EditorGUILayout.Space(3);
-
-                                        InputEditorUtils.DrowAxis("AxisY", m_TempInput.AxisY, m_TempInput.Device,
-                                            OnSelectValue, "AxisY", ref m_IsOpenAxisY);
+                                        if (m_SelectionKFInput.Device == "Keyboard")
+                                            DrawAxisKeyboard("AxisY", m_SelectionKFInput.AxisY, "AxisY");
+                                        else
+                                            DrawAxisJosticOrMouse("AxisY", m_SelectionKFInput.AxisX, "AxisY");
                                     }
                                 }
                             }
                         }
                         EditorGUILayout.EndVertical();
-
-                        ApplySettings();
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -162,162 +282,340 @@ public class InputEditorWindow : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
 
-    private void DrowInputList()
+    private void DrawInputList()
     {
-        for (int i = 0; i < m_KFInputs.Count; i++)
+        if (m_SelectionGrup == null)
+            return;
+
+        EditorKFInput[] Inputs = m_SelectionGrup.KFInputs;
+
+        for (int i = 0; i < Inputs.Length; i++)
         {
             EditorGUILayout.BeginHorizontal();
             {
-                EditorGUI.BeginDisabledGroup(i == 0);
-                {
-                    if (GUILayout.Button("↑", GUILayout.Width(25)))
-                        MoveUp(m_KFInputs[i]);
-                }
-                EditorGUI.EndDisabledGroup();
+                EnigmaticGUI.BeginSelectedGrup(m_SelectionKFInput == Inputs[i]);
 
-                EditorGUI.BeginDisabledGroup(i == m_KFInputs.Count - 1);
+                if (GUILayout.Button(Inputs[i].Tag, EditorStyles.toolbarButton))
                 {
-                    if (GUILayout.Button("↓", GUILayout.Width(25)))
-                        MoveDown(m_KFInputs[i]);
-                }
-                EditorGUI.EndDisabledGroup();
+                    m_SelectionKFInput = Inputs[i];
 
-                GUILayout.Space(3);
-
-                if (GUILayout.Button(m_KFInputs[i].Tag, EditorStyles.miniButtonMid))
-                {
-                    m_SelectionKFInput = m_KFInputs[i];
-                    
                     GUI.FocusControl(null);
-
-                    m_TempInput.Tag = m_SelectionKFInput.Tag;
-                    m_TempInput.Type = m_SelectionKFInput.Type;
-                    m_TempInput.Device = m_SelectionKFInput.Device;
-                    m_TempInput.Button = m_SelectionKFInput.Button;
                 }
+
+                EnigmaticGUI.EndSelectedGrup();
             }
             EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(4);
         }
     }
 
-    private void ApplySettings()
+    private void DrawGrupList()
     {
-        if (m_SelectionKFInput == null)
-            return;
-
-        m_SelectionKFInput.Tag = m_TempInput.Tag;
-        m_SelectionKFInput.Type = m_TempInput.Type;
-        m_SelectionKFInput.Device = m_TempInput.Device;
-    }
-
-    private void MoveUp(KFInput kFInput) => Move(kFInput, -1);
-
-    private void MoveDown(KFInput kFInput) => Move(kFInput, +1);
-
-    private void OnSelectValue(SearchedTree tree, string senderCode)
-    {
-        string value = InputEditorUtils.GetSearchedTree(tree);
-
-        if(senderCode == "type")
-            m_TempInput.Type = value;
-        else if(senderCode == "device")
-            m_TempInput.Device = value;
-        else if(senderCode == "button")
-            m_TempInput.Button = value;
-    }
-
-    private void Move(KFInput kFInput, int direction)
-    {
-        if (direction == 0)
-            return;
-        else if (direction > 1)
-            direction = 1;
-        else if (direction < -1)
-            direction = -1;
-
-        List<KFInput> kFInputs = new List<KFInput>();
-
-        for (int i = 0; i < m_KFInputs.Count; i++)
-            kFInputs.Add(null);
-
-        for (int i = 0; i < m_KFInputs.Count; i++)
+        for (int i = 0; i < m_KFGrups.Count; i++)
         {
-            if (m_KFInputs[i] == kFInput)
+            EditorGUILayout.BeginHorizontal();
             {
-                kFInputs[i + direction] = kFInput;
-                kFInputs[i] = m_KFInputs[i + direction];
+                EnigmaticGUI.BeginSelectedGrup(m_SelectionGrup == m_KFGrups[i]);
 
-                break;
+                if (GUILayout.Button(m_KFGrups[i].Name, EditorStyles.toolbarButton))
+                {
+                    m_SelectionGrup = m_KFGrups[i];
+                    m_SelectionKFInput = null;
+
+                    GUI.FocusControl(null);
+                }
+
+                EnigmaticGUI.EndSelectedGrup();
             }
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(4);
+        }
+    }
+
+    private void DrawAxisKeyboard(string axisName, EditorKFAxis axis, string senderUID)
+    {
+        SearchedTreeListProvider providerPosetive = SearchedTreeListProvider.Create("KFInput_System", $"{m_SelectionKFInput.Device}Button", $"{senderUID}Posetive");
+        SearchedTreeListProvider providerNegative = SearchedTreeListProvider.Create("KFInput_System", $"{m_SelectionKFInput.Device}Button", $"{senderUID}Negative");
+
+        providerPosetive.OnSelected += OnSelectValue;
+        providerNegative.OnSelected += OnSelectValue;
+
+        DrawAxis(axisName, axis, m_SelectionKFInput.Device, providerPosetive, providerNegative);
+    }
+
+    private void DrawAxisJosticOrMouse(string axisName, EditorKFAxis axis, string senderUID)
+    {
+        SearchedTreeListProvider provider =
+            SearchedTreeListProvider.Create("KFInput_System", $"{m_SelectionKFInput.Device}Axis", $"{senderUID}");
+
+        provider.OnSelected += OnSelectValue;
+
+        DrawAxis(axisName, axis, m_SelectionKFInput.Device, provider);
+    }
+
+    private void DrawAxis(string name, EditorKFAxis axis, string device, params SearchedTreeListProvider[] providers)
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            GUILayout.Label(name);
+
+            EditorGUILayout.BeginVertical("box");
+            {
+                if (device == "Keyboard")
+                {
+                    SearchedTreeUtility.DrawSelectionTree("PosetiveButton", axis.PosetiveButton, providers[0]);
+                    SearchedTreeUtility.DrawSelectionTree("NegativeButton", axis.NegativeButton, providers[1]);
+                }
+                else
+                {
+                    SearchedTreeUtility.DrawSelectionTree("Value", axis.Value, providers[0]);
+                }
+            }
+            EditorGUILayout.EndVertical();
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+    private void OnSelectValue(string senderUID, List<string> tree)
+    {
+        string value = SearchedTreeUtility.CompileTree(tree);
+
+        switch (senderUID)
+        {
+            case "type":
+                m_SelectionKFInput.Type = value;
+                break;
+            case "device":
+                m_SelectionKFInput.Device = value;
+                break;
+            case "button":
+                m_SelectionKFInput.Button = value;
+                break;
+            case "AxisXPosetive":
+                m_SelectionKFInput.AxisX.PosetiveButton = value;
+                break;
+            case "AxisXNegative":
+                m_SelectionKFInput.AxisX.NegativeButton = value;
+                break;
+            case "AxisYPosetive":
+                m_SelectionKFInput.AxisY.PosetiveButton = value;
+                break;
+            case "AxisYNegative":
+                m_SelectionKFInput.AxisY.NegativeButton = value;
+                break;
+            case "AxisX":
+                m_SelectionKFInput.AxisX.Value = value;
+                break;
+            case "AxisY":
+                m_SelectionKFInput.AxisY.Value = value;
+                break;
+        }
+    }
+
+    private void Apply()
+    {
+        GenerateInputTagsAndGrupsName();
+
+        Queue<InputAxis> axis = new Queue<InputAxis>();
+
+        foreach(KFInputGrup grup in m_KFGrups)
+        {
+            KFInputMapGrupProvider provider = CreateKFInputGrupProvider(grup);
+
+            provider.GrupName = (InputGrup)Enum.Parse(typeof(InputGrup), grup.Name);
+
+            foreach (EditorKFInput input in grup.KFInputs)
+            {
+                provider.AddInput(input);
+
+                if (SearchedTreeUtility.DeCompileTree(input.Type, 0) == "Button")
+                    continue;
+
+                InputAxis axisX = new InputAxis($"{input.Tag} X", input, input.AxisX);
+                InputAxis axisY = new InputAxis($"{input.Tag} Y", input, input.AxisY);
+
+                if (SearchedTreeUtility.DeCompileTree(input.Type, 1) == "Vector2")
+                {
+                    axis.Enqueue(axisX);
+                    axis.Enqueue(axisY);
+                }
+                else
+                {
+                    axis.Enqueue(axisX);
+                }
+            }
+
+            EditorUtility.SetDirty(provider);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            string path = $"Assets/Resources/Enigmatic/KFInput/Providers/{grup.Name}Provider.asset";
+            Debug.Log($"Grup KFInput {grup.Name} saved to provider by path: {path}");
         }
 
-        for (int i = 0; i < m_KFInputs.Count; i++)
-            if (kFInputs[i] == null)
-                kFInputs[i] = m_KFInputs[i];
+        UnityInputManager.Clear();
 
-        m_KFInputs = kFInputs;
+        while(axis.Count > 0)
+            UnityInputManager.AddAxis(axis.Dequeue());
 
+        Debug.Log("All inputs applyed!");
     }
 
-///         [
-///             Name: "tagX",
-///             Value: "axis",
-///             PosetiveButton: "button",
-///             NegativeButton: "button",
-///         ],
+    private void GenerateInputTagsAndGrupsName()
+    {
+        string tags = string.Empty;
+        string grups = string.Empty;
+
+        foreach(KFInputGrup grup in m_KFGrups)
+        {
+            grups += $"{grup.Name},\n";
+
+            foreach(EditorKFInput input in grup.KFInputs)
+                tags += $"{input.Tag},\n";
+        }
+
+        string code =
+            $"namespace Enigmatic.KFInputSystem\n" +
+            $"{{\n" +
+            $"public enum InputTag\n" +
+            $"{{\n" +
+            $"{tags}\n" +
+            $"}}\n" +
+            $"\n" +
+            $"public enum InputGrup\n" +
+            $"{{\n" +
+            $"{grups}\n" +
+            $"}}\n" +
+            $"}}\n";
+
+        CodeGenerator.Generate
+            (code, EnigmaticData.GetFullPath(EnigmaticData.inputStorege), "Inputs");
+
+        Debug.Log($"Inputs tag and grup name saved by " +
+            $"{EnigmaticData.GetFullPath(EnigmaticData.inputStorege)}");
+    }
+
+    //from https://discussions.unity.com/t/how-to-create-a-scriptableobject-file-with-specific-path-through-code/239303
+    private KFInputMapGrupProvider CreateKFInputGrupProvider(KFInputGrup grup)
+    {
+        if(Directory.Exists(s_ProvidersPath) == false)
+            Directory.CreateDirectory(s_ProvidersPath);
+
+        KFInputMapGrupProvider provider = CreateInstance<KFInputMapGrupProvider>();
+
+        string path = $"Assets/Resources/Enigmatic/KFInput/Providers/{grup.Name}Provider.asset";
+
+        AssetDatabase.CreateAsset(provider, path);
+        
+        return provider;
+    }
+
+    ///         [
+    ///             Name: "tagX",
+    ///             Value: "axis",
+    ///             PosetiveButton: "button",
+    ///             NegativeButton: "button",
+    ///         ],
 }
 
-public class Axis
-{
-    public string Value;
-    public string PosetiveButton;
-    public string NegativeButton;
-
-    public Axis(string value, string posetiveButton, string negativeButton)
-    {
-        Value= value;
-        PosetiveButton = posetiveButton;
-        NegativeButton = negativeButton;
-    }
-
-    public Axis() 
-    {
-        Value = "None";
-        PosetiveButton = "None";
-        NegativeButton = "None";
-    }
-
-}
-
-public class KFInput
+public class EditorKFInput
 {
     public string Tag { get; set; }
     public string Type { get; set; }
     public string Device { get; set; }
-    public Axis AxisX { get; set; }
-    public Axis AxisY { get; set; }
+
+    public float Gravity { get; set; }
+    public float Dead { get; set; }
+    public float Sensitivity { get; set; }
+
+    public EditorKFAxis AxisX { get; set; }
+    public EditorKFAxis AxisY { get; set; }
+
     public string Button { get; set; }
 
-    public KFInput(string tag, string type, string device, Axis axisX, Axis axisY, string button)
+    public EditorKFInput(string tag, string type, string device, EditorKFAxis axisX, EditorKFAxis axisY, string button)
     {
         Tag = tag;
+
         Type = type;
         Device = device;
+
+        Gravity = 3;
+        Dead = 0.001f;
+        Sensitivity = 3;
+
         AxisX = axisX;
         AxisY = axisY;
+
         Button = button;
     }
 
-    public KFInput(string tag)
+    public EditorKFInput(string tag)
     {
         Tag = tag;
 
         Type = "None";
         Device = "None";
-        AxisX = new Axis();
-        AxisY = new Axis();
+
+        Gravity = 3;
+        Dead = 0.001f;
+        Sensitivity = 3;
+
+        AxisX = new EditorKFAxis();
+        AxisY = new EditorKFAxis();
+
         Button = "None";
     }
+
+}
+
+public class EditorKFAxis
+{
+    public string Value;
+    public string PosetiveButton;
+    public string NegativeButton;
+
+    public EditorKFAxis(string value, string posetiveButton, string negativeButton)
+    {
+        Value = value;
+        PosetiveButton = posetiveButton;
+        NegativeButton = negativeButton;
+    }
+
+    public EditorKFAxis()
+    {
+        Value = "None";
+        PosetiveButton = "None";
+        NegativeButton = "None";
+    }
+}
+
+public class KFInputGrup
+{
+    public string Name;
+
+    private List<EditorKFInput> m_KFInputs = new List<EditorKFInput>();
+
+    public EditorKFInput[] KFInputs => m_KFInputs.ToArray();
+
+    public KFInputGrup(string name)
+    {
+        Name = name;
+    }
+
+    public void Add(EditorKFInput newEditorKFInput)
+    {
+        m_KFInputs.Add(newEditorKFInput);
+    }
+
+    public void Remove(EditorKFInput editorKFInput)
+    {
+        m_KFInputs.Remove(editorKFInput);
+    }
+
+    public void Clear() => m_KFInputs.Clear();
 }
 
 #endif

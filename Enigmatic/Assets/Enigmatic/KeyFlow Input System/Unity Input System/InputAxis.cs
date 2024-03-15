@@ -1,4 +1,6 @@
-﻿namespace KFInputSystem.Utility
+﻿using Enigmatic.Experemental.SearchedWindowUtility;
+
+namespace KFInputSystem.Utility
 {
     public class InputAxis
     {
@@ -13,47 +15,33 @@
         public int Type { get; private set; }
         public int Axis { get; private set; }
 
-        public InputAxis(string tag, Axis axis)
+        public InputAxis(EditorKFInput input)
         {
-            Tag = tag;
+            if (SearchedTreeUtility.DeCompileTree(input.Type, 0) == "Button")
+                throw new System.InvalidOperationException();
 
-            Gravity = axis.Gravity;
-            Dead = axis.Dead;
-            Sensitivity = axis.Sensitivity;
-
-            if (axis.InputType == InputType.Button)
-            {
-                if (axis.Device == Device.KeyboardOrMouse)
-                {
-                    PosetiveButton = UnityInputManager.ConvertToUnityInputReadable(axis.KeyboardPosetiveButton.ToString());
-                    NegativeButton = UnityInputManager.ConvertToUnityInputReadable(axis.KeyboardNegativeButton.ToString());
-                }
-                else if (axis.Device == Device.Joystick)
-                {
-                    PosetiveButton = UnityInputManager.ConvertToUnityInputReadable(axis.JoystickPosetiveButton.ToString());
-                    NegativeButton = UnityInputManager.ConvertToUnityInputReadable(axis.JoystickNegativeButton.ToString());
-                }
-
+            if (input.Device == "Keyboard")
                 Type = 0;
-                Axis = 0;
-            }
-            else if (axis.InputType == InputType.Value)
-            {
-                if (axis.Device == Device.MouseMovement)
-                {
-                    Type = 1;
-                    Axis = (int)axis.MouseAxis - 1;
-                }
-                else if (axis.Device == Device.Joystick)
-                {
-                    Type = 2;
+            else if(input.Device == "Mouse")
+                Type = 1;
+            else
+                Type = 2;
 
-                    if (axis.JoystickAxis == JoystickAxis.LeftStickX
-                        && axis.JoystickAxis == JoystickAxis.LeftStickY)
-                        Axis = (int)axis.JoystickAxis - 1;
-                    else
-                        Axis = (int)axis.JoystickAxis + 1;
-                }
+            if (input.Device == "Keyboard")
+            {
+                PosetiveButton = UnityInputManager.ConvertToUnityInputReadable(input.AxisX.PosetiveButton);
+                NegativeButton = UnityInputManager.ConvertToUnityInputReadable(input.AxisX.NegativeButton);
+            }
+            else if (input.Device == "Mouse")
+            {
+                if (input.AxisX.Value == "MouseX")
+                    Axis = 0;
+                else
+                    Axis = 1;
+            }
+            else
+            {
+                Axis = JosticAxisParse(input.AxisX.Value);
             }
         }
 
@@ -68,6 +56,76 @@
             Sensitivity = sensitivity;
             Type = type;
             Axis = axis;
+        }
+
+        public InputAxis(string tag, EditorKFInput input, EditorKFAxis axis) 
+        {
+            Tag = tag;
+
+            Gravity = input.Gravity;
+            Dead = input.Dead;
+            Sensitivity = input.Sensitivity;
+
+            if (input.Device == "Keyboard")
+                Type = 0;
+            else if (input.Device == "Mouse")
+                Type = 1;
+            else
+                Type = 2;
+
+            if (input.Device == "Keyboard")
+            {
+                PosetiveButton = UnityInputManager.ConvertToUnityInputReadable(axis.PosetiveButton);
+                NegativeButton = UnityInputManager.ConvertToUnityInputReadable(axis.NegativeButton);
+            }
+            else if (input.Device == "Mouse")
+            {
+                Axis = MosusAxisParse(axis.Value);
+            }
+            else
+            {
+                Axis = JosticAxisParse(axis.Value);
+            }
+        }
+
+        public int JosticAxisParse(string value)
+        {
+            int axis = 0;
+
+            switch(value)
+            {
+                case "LeftStickX":
+                    axis = 0;
+                    break;
+                case "LeftStickY":
+                    axis = 1;
+                    break;
+                case "RightStickX":
+                    axis = 2;
+                    break;
+                case "RightStickY":
+                    axis = 3;
+                    break;
+            }
+
+            return axis;
+        }
+
+        public int MosusAxisParse(string value)
+        {
+            int axis = 0;
+
+            switch (value)
+            {
+                case "MouseX":
+                    axis = 0;
+                    break;
+                case "MouseY":
+                    axis = 1;
+                    break;
+            }
+
+            return axis;
         }
     }
 }

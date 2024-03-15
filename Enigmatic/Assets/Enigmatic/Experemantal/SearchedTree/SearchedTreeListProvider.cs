@@ -2,13 +2,13 @@
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using System;
-using TMPro;
+using System.Linq;
 
 namespace Enigmatic.Experemental.SearchedWindowUtility
 {
     public class SearchedTreeListProvider : ScriptableObject, ISearchWindowProvider
     {
-        public event Action<string, string> OnSelected;
+        public event Action<string, List<string>> OnSelected;
 
         private string m_GrupName;
         private string m_BranchName;
@@ -18,7 +18,7 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
         public static SearchedTreeListProvider Create(string grupName, string branchName, string senderUID = "0")
         {
             SearchedTreeListProvider provider = CreateInstance<SearchedTreeListProvider>();
-            provider.Init(grupName, branchName, senderUID);
+            provider.Init(grupName.Replace("_", " "), branchName, senderUID);
 
             return provider;
         }
@@ -35,13 +35,15 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             if(STPFile.TryLoadTree(m_GrupName, m_BranchName, out string stpFile))
                 return GetSearchTreeEntries(stpFile);
 
-            throw null;
+            throw new Exception("Invalid Loaded Searched Tree!");
         }
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
             OnSelected?.Invoke
-                (m_SenderUID, SearchTreeEntry.userData.ToString());
+                (m_SenderUID, SearchTreeEntry.userData as List<string>);
+
+            OnSelected = null;
 
             return true;
         }
@@ -51,6 +53,7 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             string[] stp = stpFile.Split('\n');
 
             List<SearchTreeEntry> searchTreeEntrys = new List<SearchTreeEntry>();
+            List<string> path = new List<string>();
 
             uint depthLevel = 0;
 
@@ -65,6 +68,9 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
                 else if (lineFixed == "]")
                 {
                     depthLevel--;
+
+                    if(path.Count - 1 >= 0)
+                        path.Remove(path[path.Count - 1]);
                 }   
                 else
                 {
@@ -74,13 +80,19 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
                         {
                             searchTreeEntrys.Add(new SearchTreeGroupEntry
                                 (new GUIContent(lineFixed), (int)depthLevel));
+
+                            path.Add(lineFixed);
                         }
                         else
                         {
+                            path.Add(lineFixed);
+
                             SearchTreeEntry searchTreeEntry = new SearchTreeEntry(new GUIContent(lineFixed));
                             searchTreeEntry.level = (int)depthLevel;
-                            searchTreeEntry.userData = lineFixed;
+                            searchTreeEntry.userData = path.ToList();
                             searchTreeEntrys.Add(searchTreeEntry);
+
+                            path.Remove(path[path.Count - 1]);
                         }
                     }
                 }

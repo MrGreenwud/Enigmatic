@@ -12,7 +12,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a61fd5cfaf0aa842b9b96a09e582d97, type: 3}
   m_Name: KFInput Map
   m_EditorClassIdentifier: 
-  m_InputsVec2: []
+  m_InputsVec2:
+  - m_Tag: Move
+    m_AxisX:
+      m_Device: 0
+      m_InputType: 0
+      m_Gravity: 0
+      m_Dead: 0
+      m_Sensitivity: 0
+      m_KeyboardPosetiveButton: 0
+      m_KeyboardNegativeButton: 0
+      m_JoystickPosetiveButton: 0
+      m_JoystickNegativeButton: 0
+      m_MouseAxis: 0
+      m_JoystickAxis: 0
+    m_AxisY:
+      m_Device: 0
+      m_InputType: 0
+      m_Gravity: 0
+      m_Dead: 0
+      m_Sensitivity: 0
+      m_KeyboardPosetiveButton: 0
+      m_KeyboardNegativeButton: 0
+      m_JoystickPosetiveButton: 0
+      m_JoystickNegativeButton: 0
+      m_MouseAxis: 0
+      m_JoystickAxis: 0
+  - m_Tag: 
+    m_AxisX:
+      m_Device: 0
+      m_InputType: 0
+      m_Gravity: 0
+      m_Dead: 0
+      m_Sensitivity: 0
+      m_KeyboardPosetiveButton: 0
+      m_KeyboardNegativeButton: 0
+      m_JoystickPosetiveButton: 0
+      m_JoystickNegativeButton: 0
+      m_MouseAxis: 0
+      m_JoystickAxis: 0
+    m_AxisY:
+      m_Device: 0
+      m_InputType: 0
+      m_Gravity: 0
+      m_Dead: 0
+      m_Sensitivity: 0
+      m_KeyboardPosetiveButton: 0
+      m_KeyboardNegativeButton: 0
+      m_JoystickPosetiveButton: 0
+      m_JoystickNegativeButton: 0
+      m_MouseAxis: 0
+      m_JoystickAxis: 0
   m_InputsAxis: []
   m_InputButtonDown: []
   m_InputButtonUp: []

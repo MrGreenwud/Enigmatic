@@ -1,21 +1,70 @@
 ﻿using UnityEngine;
 
-namespace KFInputSystem
+namespace Enigmatic.KFInputSystem
 {
     public class InputManager : MonoBehaviour
     {
-        [SerializeField] private InputMap m_InputMap;
+        [SerializeField] private KFInputMapGrupProvider[] m_InputMapProviders;
 
         private void Update()
         {
-            m_InputMap.Update();
+            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+                provider.Update();
         }
 
-        public KFInputButton GetInputButtonDown(InputTag tag) => m_InputMap.GetInputButtonDown(tag);
-        public KFInputButton GetInputButtonUp(InputTag tag) => m_InputMap.GetInputButtonUp(tag);
-        public KFInputButton GetInputButtonPress(InputTag tag) => m_InputMap.GetInputButtonPress(tag);
+        public KFInputButton GetInputButtonDown(InputGrup grup, InputTag tag)  
+        { 
+            foreach(KFInputMapGrupProvider provider in m_InputMapProviders)
+            {
+                if (provider.GrupName == grup)
+                    return provider.GetInputButtonDown(tag);
+            }
 
-        public KFInputVec2 GetInputVec2(InputTag tag) => m_InputMap.GetInputVec2(tag);
-        public KFInputAxis GetInputAxis(InputTag tag) => m_InputMap.GetInputAxis(tag);
+            throw new System.InvalidOperationException();
+        }
+
+        public KFInputButton GetInputButtonUp(InputGrup grup, InputTag tag)
+        {
+            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            {
+                if (provider.GrupName == grup)
+                    return provider.GetInputButtonUp(tag);
+            }
+
+            throw new System.InvalidOperationException();
+        }
+
+        public KFInputButton GetInputButtonPress(InputGrup grup, InputTag tag) 
+        {
+            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            {
+                if (provider.GrupName == grup)
+                    return provider.GetInputButtonPress(tag);
+            }
+
+            throw new System.InvalidOperationException();
+        }
+
+        public KFInputVec2 GetInputVec2(InputGrup grup, InputTag tag) 
+        {
+            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            {
+                if (provider.GrupName == grup)
+                    return provider.GetInputVec2(tag);
+            }
+
+            throw new System.InvalidOperationException();
+        }
+
+        public KFInputAxis GetInputAxis(InputGrup grup, InputTag tag) 
+        {
+            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            {
+                if (provider.GrupName == grup)
+                    return provider.GetInputAxis(tag);
+            }
+
+            throw new System.InvalidOperationException();
+        }
     }
 }

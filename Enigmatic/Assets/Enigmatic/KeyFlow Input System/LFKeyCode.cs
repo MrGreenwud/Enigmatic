@@ -1,5 +1,5 @@
 ﻿
-namespace KFInputSystem
+namespace Enigmatic.KFInputSystem
 {
     //Form Unity KeyCode
 
@@ -609,7 +609,7 @@ namespace KFInputSystem
         Mouse6 = 329
     }
 
-    public enum JoystickKeyCode
+    public enum JoystickButtonCode
     {
         //
         // Сводка:
