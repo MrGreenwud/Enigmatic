@@ -23,10 +23,10 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             return provider;
         }
 
-        private void Init(string GrupName, string BranchName, string senderUID)
+        private void Init(string grupName, string branchName, string senderUID)
         {
-            m_GrupName = GrupName;
-            m_BranchName = BranchName;
+            m_GrupName = grupName;
+            m_BranchName = branchName;
             m_SenderUID = senderUID;
         }
 
@@ -40,11 +40,9 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
-            OnSelected?.Invoke
-                (m_SenderUID, SearchTreeEntry.userData as List<string>);
+            OnSelected?.Invoke(m_SenderUID, SearchTreeEntry.userData as List<string>);
 
             OnSelected = null;
-
             return true;
         }
 
@@ -59,7 +57,8 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
 
             for(int i = 2; i < stp.Length; i++)
             {
-                string lineFixed = FileEditor.Replace(stp[i].Replace(" ", string.Empty), '_', ' ');
+                string lineFixed = FileEditor.Replace(
+                    stp[i].Replace(" ", string.Empty), '_', ' ');
 
                 if (lineFixed == "[")
                 {
@@ -78,8 +77,8 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
                     {
                         if (FileEditor.Replace(stp[i + 1].Replace(" ", string.Empty), '_', ' ') == "[")
                         {
-                            searchTreeEntrys.Add(new SearchTreeGroupEntry
-                                (new GUIContent(lineFixed), (int)depthLevel));
+                            searchTreeEntrys.Add(new SearchTreeGroupEntry(
+                                new GUIContent(lineFixed), (int)depthLevel));
 
                             path.Add(lineFixed);
                         }

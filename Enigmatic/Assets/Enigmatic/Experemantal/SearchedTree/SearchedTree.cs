@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-
 namespace Enigmatic.Experemental.SearchedWindowUtility
 {
     public class SearchedTree
@@ -28,10 +24,10 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
         {
             {
                 if (m_Parent != null)
-                    throw new InvalidOperationException("");
+                    throw new InvalidOperationException("This search tree has a parent!");
 
                 if (parent == null)
-                    throw new ArgumentNullException(nameof(parent));
+                    throw new ArgumentNullException("The passed parent is null!");
             }
 
             m_Parent = parent;
@@ -42,10 +38,10 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
         {
             {
                 if (newChild == null)
-                    throw new ArgumentNullException(nameof(newChild));
+                    throw new ArgumentNullException("This child searched tree is null!");
 
                 if (m_SearchedTrees.Contains(newChild))
-                    throw new ArgumentException("");
+                    throw new ArgumentException("This searched tree has a this child!");
 
             }
 
@@ -57,6 +53,9 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
 
         public void RemoveChild(SearchedTree child)
         {
+            if (m_SearchedTrees.Contains(child) == false)
+                throw new InvalidOperationException("This searched tree is not child the serched tree!");
+
             m_SearchedTrees.Remove(child);
         }
 
@@ -71,21 +70,21 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
             Level = m_Parent.Level + 1;
         }
 
-        public uint Count()
+        public int GetCount()
         {
-            uint count = 0;
-            count += (uint)m_SearchedTrees.Count;
+            int count = 0;
+            count += m_SearchedTrees.Count;
 
             if (m_Parent != null)
-                count += m_Parent.Count();
+                count += m_Parent.GetCount();
 
             return count;
         }
 
         public SearchedTree[] GetAllTree()
         {
-            List<SearchedTree> trees = new List<SearchedTree>(16) { this };
-            
+            List<SearchedTree> trees = new List<SearchedTree>(GetCount()) { this };
+
             foreach (SearchedTree tree in m_SearchedTrees)
             {
                 if (tree.GetСhildren().Length > 0)
@@ -105,7 +104,7 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
                 tree += m_Parent.GetTree();
 
             string[] tempTree = tree.Split('/');
-            tree = "";
+            tree = string.Empty;
 
             for (int i = tempTree.Length - 1; i >= 0; i--)
             {
@@ -119,38 +118,5 @@ namespace Enigmatic.Experemental.SearchedWindowUtility
         }
 
         public override string ToString() => GetTree();
-    }
-
-    public static class EnigmaticGUI
-    {
-        public readonly static Color SelectionColor = new Color(0.6039f, 0.8117f, 1f);
-
-        public static void BeginSelectedGrup(bool selected)
-        {
-            if (selected)
-                GUI.backgroundColor = SelectionColor;
-                //GUI.contentColor = SelectionColor;
-        }
-
-        public static void EndSelectedGrup()
-        {
-            GUI.backgroundColor = Color.white;
-        }
-
-        public static bool Button(string text, Vector2 positonPixel, params GUILayoutOption[] gUILayoutOptions)
-        {
-            bool result;
-
-            GUILayout.BeginArea(new Rect(positonPixel.x, positonPixel.y, 100, 100));
-            result = GUILayout.Button(text, gUILayoutOptions);
-            GUILayout.EndArea();
-
-            return result;
-        }
-
-        public static bool Button(string text, float x, float y, params GUILayoutOption[] gUILayoutOptions)
-        {
-            return Button(text, new Vector2(x, y), gUILayoutOptions);
-        }
     }
 }

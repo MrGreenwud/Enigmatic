@@ -22,14 +22,7 @@ namespace Enigmatic.KFInputSystem
 
     public class KFInputButton : KFInput<bool>
     {
-        [SerializeField] private KeyCode m_KeyCode;
-
-        public KeyCode KeyCode => m_KeyCode;
-
-        public KFInputButton(string tag, KeyCode keyCode) : base(tag)
-        {
-            m_KeyCode = keyCode;
-        }
+        public KFInputButton(string tag) : base(tag) { }
 
         public override void OnAction()
         {
@@ -72,11 +65,11 @@ namespace Enigmatic.KFInputSystem
     [Serializable]
     public class KFInputButtonDown : KFInputButton
     {
-        public KFInputButtonDown(string tag, KeyCode keyCode) : base(tag, keyCode) { }
+        public KFInputButtonDown(string tag) : base(tag) { }
 
         public override void OnAction()
         {
-            Value = Input.GetKeyDown(KeyCode);
+            Value = Input.GetButtonDown(Tag);
             base.OnAction();
         }
     }
@@ -84,11 +77,11 @@ namespace Enigmatic.KFInputSystem
     [Serializable]
     public class KFInputButtonUp : KFInputButton
     {
-        public KFInputButtonUp(string tag, KeyCode keyCode) : base(tag, keyCode) { }
+        public KFInputButtonUp(string tag) : base(tag) { }
 
         public override void OnAction()
         {
-            Value = Input.GetKeyUp(KeyCode);
+            Value = Input.GetButtonUp(Tag);
             base.OnAction();
         }
     }
@@ -96,11 +89,11 @@ namespace Enigmatic.KFInputSystem
     [Serializable]
     public class KFInputButtonPress : KFInputButton
     {
-        public KFInputButtonPress(string tag, KeyCode keyCode) : base(tag, keyCode) { }
+        public KFInputButtonPress(string tag) : base(tag) { }
 
         public override void OnAction()
         {
-            Value = Input.GetKey(KeyCode);
+            Value = Input.GetButton(Tag);
             base.OnAction();
         }
     }

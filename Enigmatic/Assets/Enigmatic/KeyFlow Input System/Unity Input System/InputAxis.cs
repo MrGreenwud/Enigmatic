@@ -1,6 +1,7 @@
-﻿using Enigmatic.Experemental.SearchedWindowUtility;
+﻿using System;
+using Enigmatic.Experemental.SearchedWindowUtility;
 
-namespace KFInputSystem.Utility
+namespace Enigmatic.KFInputSystem.Editor
 {
     public class InputAxis
     {
@@ -15,36 +16,6 @@ namespace KFInputSystem.Utility
         public int Type { get; private set; }
         public int Axis { get; private set; }
 
-        public InputAxis(EditorKFInput input)
-        {
-            if (SearchedTreeUtility.DeCompileTree(input.Type, 0) == "Button")
-                throw new System.InvalidOperationException();
-
-            if (input.Device == "Keyboard")
-                Type = 0;
-            else if(input.Device == "Mouse")
-                Type = 1;
-            else
-                Type = 2;
-
-            if (input.Device == "Keyboard")
-            {
-                PosetiveButton = UnityInputManager.ConvertToUnityInputReadable(input.AxisX.PosetiveButton);
-                NegativeButton = UnityInputManager.ConvertToUnityInputReadable(input.AxisX.NegativeButton);
-            }
-            else if (input.Device == "Mouse")
-            {
-                if (input.AxisX.Value == "MouseX")
-                    Axis = 0;
-                else
-                    Axis = 1;
-            }
-            else
-            {
-                Axis = JosticAxisParse(input.AxisX.Value);
-            }
-        }
-
         public InputAxis(string tag, string posetiveButton, string negativeButton, float gravity,
             float dead, float sensitivity, int type, int axis)
         {
@@ -58,33 +29,45 @@ namespace KFInputSystem.Utility
             Axis = axis;
         }
 
-        public InputAxis(string tag, EditorKFInput input, EditorKFAxis axis) 
+        public InputAxis(string tag, string type, EditorKFInputSettings inputSettings)
         {
+            if (SearchedTreeUtility.DeCompileTree(type, 0) == "Axis")
+                throw new InvalidOperationException();
+
             Tag = tag;
+            Type = DeviceParse(inputSettings.Device);
 
-            Gravity = input.Gravity;
-            Dead = input.Dead;
-            Sensitivity = input.Sensitivity;
+            Gravity = inputSettings.Gravity;
+            Dead = inputSettings.Dead;
+            Sensitivity = inputSettings.Sensitivity;
+            
+            PosetiveButton = UnityInputManager.ConvertToUnityInputReadable(inputSettings.Button);
+        }
 
-            if (input.Device == "Keyboard")
-                Type = 0;
-            else if (input.Device == "Mouse")
-                Type = 1;
-            else
-                Type = 2;
+        public InputAxis(string tag, string type, EditorKFInputSettings inputSettings, EditorKFAxisSettings axisSettings)
+        {
+            if (SearchedTreeUtility.DeCompileTree(type, 0) == "Button")
+                throw new InvalidOperationException();
 
-            if (input.Device == "Keyboard")
+            Tag = tag;
+            Type = DeviceParse(inputSettings.Device);
+
+            Gravity = inputSettings.Gravity;
+            Dead = inputSettings.Dead;
+            Sensitivity = inputSettings.Sensitivity;
+
+            if (inputSettings.Device == "Keyboard")
             {
-                PosetiveButton = UnityInputManager.ConvertToUnityInputReadable(axis.PosetiveButton);
-                NegativeButton = UnityInputManager.ConvertToUnityInputReadable(axis.NegativeButton);
+                PosetiveButton = UnityInputManager.ConvertToUnityInputReadable(axisSettings.PosetiveButton);
+                NegativeButton = UnityInputManager.ConvertToUnityInputReadable(axisSettings.NegativeButton);
             }
-            else if (input.Device == "Mouse")
+            else if (inputSettings.Device == "Mouse")
             {
-                Axis = MosusAxisParse(axis.Value);
+                Axis = MosusAxisParse(axisSettings.Value);
             }
             else
             {
-                Axis = JosticAxisParse(axis.Value);
+                Axis = JosticAxisParse(axisSettings.Value);
             }
         }
 
@@ -101,10 +84,10 @@ namespace KFInputSystem.Utility
                     axis = 1;
                     break;
                 case "RightStickX":
-                    axis = 2;
+                    axis = 3;
                     break;
                 case "RightStickY":
-                    axis = 3;
+                    axis = 4;
                     break;
             }
 
@@ -126,6 +109,18 @@ namespace KFInputSystem.Utility
             }
 
             return axis;
+        }
+
+        public int DeviceParse(string device)
+        {
+            if (device == "Keyboard")
+                return 0;
+            else if (device == "Mouse")
+                return 1;
+            else if(device == "Joystick")
+                return 2;
+
+            throw new InvalidOperationException();
         }
     }
 }

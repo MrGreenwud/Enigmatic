@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Enigmatic.KFInputSystem
+namespace Enigmatic.KFInputSystem.Editor
 {
     public static class KFIMFile
     {
@@ -65,49 +65,68 @@ namespace Enigmatic.KFInputSystem
             return inputs.ToArray();
         }
 
-        public static EditorKFInput LoadInput(string inputKFIM)
+        public static EditorKFInput LoadInput(string kfiInput)
         {
-            EditorKFInput input = new EditorKFInput(GetTag(inputKFIM));
+            string[] kfiInputSettings = GetInputSettings(kfiInput);
 
-            input.Type = GetType(inputKFIM);
-            input.Device = GetDevice(inputKFIM);
+            EditorKFInputSettings keyboadAndMouse = LoadSettings(kfiInputSettings[0]);
+            EditorKFInputSettings joystick = LoadSettings(kfiInputSettings[1]);
 
-            input.Gravity = GetGravity(inputKFIM);
-            input.Dead = GetDead(inputKFIM);
-            input.Sensitivity = GetSensitivity(inputKFIM);
+            EditorKFInput input = new EditorKFInput(keyboadAndMouse, joystick);
 
-            string[] values = GetAxisValue(inputKFIM);
-            string[,] buttons = GetAxisButton(inputKFIM);
+            input.Tag = GetTag(kfiInput);
+            input.Type = GetType(kfiInput);
 
-            EditorKFAxis axisX = new EditorKFAxis();
+            return input;
+        }
+
+        public static EditorKFInputSettings LoadSettings(string kfiInputSettings)
+        {
+            EditorKFInputSettings settings = new EditorKFInputSettings();
+
+            settings.Device = GetDevice(kfiInputSettings);
+
+            settings.Gravity = GetGravity(kfiInputSettings);
+            settings.Dead = GetDead(kfiInputSettings);
+            settings.Sensitivity = GetSensitivity(kfiInputSettings);
+
+            EditorKFAxisSettings axisX = new EditorKFAxisSettings();
+            EditorKFAxisSettings axisY = new EditorKFAxisSettings();
+
+            string[] values = GetAxisValue(kfiInputSettings);
+            string[,] buttons = GetAxisButton(kfiInputSettings);
 
             axisX.Value = values[0];
             axisX.PosetiveButton = buttons[0, 0];
             axisX.NegativeButton = buttons[0, 1];
 
-            EditorKFAxis axisY = new EditorKFAxis();
-
             axisY.Value = values[1];
             axisY.PosetiveButton = buttons[1, 0];
             axisY.NegativeButton = buttons[1, 1];
 
-            input.AxisX = axisX;
-            input.AxisY = axisY;
+            settings.AxisXSettings = axisX;
+            settings.AxisYSettings = axisY;
 
-            input.Button = GetButton(inputKFIM);
+            settings.Button = GetButton(kfiInputSettings);
 
-            return input;
+            return settings;
         }
 
         public static string[] GetInputs(string kfimFile)
         {
-            List<string> inputsKFIM = kfimFile.SplitArea(2, 21).ToList();
+            List<string> inputsKFIM = kfimFile.SplitArea(2, 44).ToList();
             return inputsKFIM.ToArray();
         }
 
-        public static string[] GetAxis(string kfimInput)
+        public static string[] GetInputSettings(string kfimInput)
         {
-            string axis = kfimInput.Split("\n").ReadLines(7, 18);
+            List<string> inputsKFIM = kfimInput.SplitArea(3, 20).ToList();
+            return inputsKFIM.ToArray();
+        }
+
+        public static string[] GetAxis(string kfimInputSettings)
+        {
+            string axis = kfimInputSettings.Split("\n").ReadLines(6, 17);
             List<string> axisKFIM = axis.SplitArea(0, 6).ToList();
             return axisKFIM.ToArray();
         }
@@ -124,27 +143,27 @@ namespace Enigmatic.KFInputSystem
             return type;
         }
 
-        public static string GetDevice(string kfimInput)
+        public static string GetDevice(string kfimInputSettings)
         {
-            string device = GetProperty(kfimInput, 3);
+            string device = GetProperty(kfimInputSettings, 2);
             return device;
         }
 
         public static float GetGravity(string kfimInput)
         {
-            string gravity = GetProperty(kfimInput, 4);
+            string gravity = GetProperty(kfimInput, 3);
             return float.Parse(gravity);
         }
 
         public static float GetDead(string kfimInput)
         {
-            string dead = GetProperty(kfimInput, 5);
+            string dead = GetProperty(kfimInput, 4);
             return float.Parse(dead);
         }
 
         public static float GetSensitivity(string kfimInput)
         {
-            string sensitivity = GetProperty(kfimInput, 6);
+            string sensitivity = GetProperty(kfimInput, 5);
             return float.Parse(sensitivity);
         }
 
@@ -161,16 +180,16 @@ namespace Enigmatic.KFInputSystem
 
             string[,] buttons =
             {
-            { posetiveButton[0], negativeButton[0] },
-            { posetiveButton[1], negativeButton[1] }
-        };
+                { posetiveButton[0], negativeButton[0] },
+                { posetiveButton[1], negativeButton[1] }
+            };
 
             return buttons;
         }
 
-        public static string GetButton(string kfimInput)
+        public static string GetButton(string kfimInputSettings)
         {
-            string button = GetProperty(kfimInput, 19);
+            string button = GetProperty(kfimInputSettings, 18);
             return button;
         }
 
@@ -187,9 +206,15 @@ namespace Enigmatic.KFInputSystem
             return propertys;
         }
 
-        private static string GetProperty(string kfimInput, int lineNumber)
+        private static string GetProperty(string @object, int lineNumber)
         {
-            string property = kfimInput.Split("\n")[lineNumber].Replace(" ", string.Empty).Split(':')[1];
+            //Debug
+#if false
+            Debug.Log(lineNumber);
+            Debug.Log(@object.Split("\n")[lineNumber].Replace(" ", string.Empty));
+#endif
+
+            string property = @object.Split("\n")[lineNumber].Replace(" ", string.Empty).Split(':')[1];
             return property;
         }
 
@@ -237,26 +262,52 @@ namespace Enigmatic.KFInputSystem
 
             kfim += $"{space}Tag: {input.Tag}\n";
             kfim += $"{space}Type: {input.Type}\n";
-            kfim += $"{space}Device: {input.Device}\n";
 
-            kfim += $"{space}Gravity: {input.Gravity}\n";
-            kfim += $"{space}Dead: {input.Dead}\n";
-            kfim += $"{space}Sensitivity: {input.Sensitivity}\n";
+            kfim += $"{space}Keyboard And Mouse\n";
 
-            kfim += GenerateAxis($"AxisX", input.AxisX);
-            kfim += GenerateAxis($"AxisY", input.AxisY);
+            kfim += $"{space}[\n";
 
-            kfim += $"{space}Button: {input.Button}\n";
+            kfim += $"{GenerateInputSettings(input.GetInputSettings(Device.Keyboard_and_Mouse))}";
+
+            kfim += $"{space}]\n";
+
+            kfim += $"{space}Joystic\n";
+
+            kfim += $"{space}[\n";
+
+            kfim += $"{GenerateInputSettings(input.GetInputSettings(Device.Joystick))}";
+
+            kfim += $"{space}]\n";
 
             kfim += $"{parentSpace}]\n";
 
             return kfim;
         }
 
-        private static string GenerateAxis(string axisName, EditorKFAxis axis)
+        private static string GenerateInputSettings(EditorKFInputSettings settings)
         {
-            string parentSpace = FileEditor.Space(2);
             string space = FileEditor.Space(3);
+
+            string kfim = "";
+
+            kfim += $"{space}Device: {settings.Device}\n";
+
+            kfim += $"{space}Gravity: {settings.Gravity}\n";
+            kfim += $"{space}Dead: {settings.Dead}\n";
+            kfim += $"{space}Sensitivity: {settings.Sensitivity}\n";
+
+            kfim += GenerateAxis($"AxisX", settings.AxisXSettings);
+            kfim += GenerateAxis($"AxisY", settings.AxisYSettings);
+
+            kfim += $"{space}Button: {settings.Button}\n";
+
+            return kfim;
+        }
+
+        private static string GenerateAxis(string axisName, EditorKFAxisSettings axis)
+        {
+            string parentSpace = FileEditor.Space(3);
+            string space = FileEditor.Space(4);
 
             string kfim = $"{parentSpace}{axisName}\n";
 
@@ -294,43 +345,6 @@ public static class EnumerableExtantion
 
         return queue;
     }
-
-    public static string ReadLines(this string[] stringsArray, int start, int end)
-    {
-        string result = string.Empty;
-
-        for (int i = start; i <= end; i++)
-            result +=  $"{stringsArray[i]}\n";
-
-        return result;
-    }
-
-    public static string[] SplitArea(this string text, int startLineNumber, int areaLineCount)
-    {
-        string[] lines = text.Split("\n");
-
-        List<string> result = new List<string>();
-
-        string tempResult = string.Empty;
-
-        int j = 1;
-
-        for (int i = startLineNumber; i < lines.Length; i++)
-        {
-            tempResult += $"{lines[i]}\n";
-
-            j++;
-
-            if (j == areaLineCount + 1)
-            {
-                result.Add(tempResult);
-                tempResult = string.Empty;
-                j = 0;
-            }
-        }
-
-        return result.ToArray();
-    }
 }
 
 /// Grup_Name
@@ -338,23 +352,46 @@ public static class EnumerableExtantion
 ///     [
 ///         Tag: tag
 ///         Type: type
-///         Device: device
-///         Gravity: 3
-///         Dead: 0.001f
-///         Sensitivity: 3
-///         AxisX 
+///         Keyboard And Mouse
 ///         [
-///             Value: axis
-///             PosetiveButton: button
-///             NegativeButton: button
+///             Device: device
+///             Gravity: 3
+///             Dead: 0.001f
+///             Sensitivity: 3
+///             AxisX 
+///             [
+///                 Value: axis
+///                 PosetiveButton: button
+///                 NegativeButton: button
+///             ]
+///             AxisY
+///             [
+///                 Value: axis
+///                 PosetiveButton: button
+///                 NegativeButton: button
+///             ]
+///             Button: button
 ///         ]
-///         AxisY
+///         Joystick
 ///         [
-///             Value: axis
-///             PosetiveButton: button
-///             NegativeButton: button
+///             Device: device
+///             Gravity: 3
+///             Dead: 0.001f
+///             Sensitivity: 3
+///             AxisX 
+///             [
+///                 Value: axis
+///                 PosetiveButton: button
+///                 NegativeButton: button
+///             ]
+///             AxisY
+///             [
+///                 Value: axis
+///                 PosetiveButton: button
+///                 NegativeButton: button
+///             ]
+///             Button: button
 ///         ]
-///         Button: button
 ///     ]
 ///     
 ///     InputTag2:

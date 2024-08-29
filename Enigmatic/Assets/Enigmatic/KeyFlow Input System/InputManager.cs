@@ -4,17 +4,24 @@ namespace Enigmatic.KFInputSystem
 {
     public class InputManager : MonoBehaviour
     {
-        [SerializeField] private KFInputMapGrupProvider[] m_InputMapProviders;
+        [SerializeField] private KFInputMapProvider[] m_InputMapProviders;
 
         private void Update()
         {
-            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            string[] names = Input.GetJoystickNames();
+
+            foreach (string name in names)
+            {
+                Debug.Log(name);
+            }
+
+            foreach (KFInputMapProvider provider in m_InputMapProviders)
                 provider.Update();
         }
 
         public KFInputButton GetInputButtonDown(InputGrup grup, InputTag tag)  
         { 
-            foreach(KFInputMapGrupProvider provider in m_InputMapProviders)
+            foreach(KFInputMapProvider provider in m_InputMapProviders)
             {
                 if (provider.GrupName == grup)
                     return provider.GetInputButtonDown(tag);
@@ -25,7 +32,7 @@ namespace Enigmatic.KFInputSystem
 
         public KFInputButton GetInputButtonUp(InputGrup grup, InputTag tag)
         {
-            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            foreach (KFInputMapProvider provider in m_InputMapProviders)
             {
                 if (provider.GrupName == grup)
                     return provider.GetInputButtonUp(tag);
@@ -36,7 +43,7 @@ namespace Enigmatic.KFInputSystem
 
         public KFInputButton GetInputButtonPress(InputGrup grup, InputTag tag) 
         {
-            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            foreach (KFInputMapProvider provider in m_InputMapProviders)
             {
                 if (provider.GrupName == grup)
                     return provider.GetInputButtonPress(tag);
@@ -47,7 +54,7 @@ namespace Enigmatic.KFInputSystem
 
         public KFInputVec2 GetInputVec2(InputGrup grup, InputTag tag) 
         {
-            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            foreach (KFInputMapProvider provider in m_InputMapProviders)
             {
                 if (provider.GrupName == grup)
                     return provider.GetInputVec2(tag);
@@ -58,7 +65,7 @@ namespace Enigmatic.KFInputSystem
 
         public KFInputAxis GetInputAxis(InputGrup grup, InputTag tag) 
         {
-            foreach (KFInputMapGrupProvider provider in m_InputMapProviders)
+            foreach (KFInputMapProvider provider in m_InputMapProviders)
             {
                 if (provider.GrupName == grup)
                     return provider.GetInputAxis(tag);

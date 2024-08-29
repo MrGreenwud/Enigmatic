@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28e1c8cb2890adc43a846b601ab2d2b1, type: 3}
+  m_Name: -1544Info
+  m_EditorClassIdentifier: 
+  m_SerializedObject:
+  - "\nObject : NodeTransform : ae83acf2-5950-495b-8801-c025a35c2c97\n{\n\tm_Position\n\t{\n\t\tx
+    : 680\n\t\ty : -440\n\t}\n}"
+  - "\nObject : NodeEditorView : 87a14e09-9ccd-4512-b4f4-0c95fe77abe9\n{\n\tm_Transform
+    : ae83acf2-5950-495b-8801-c025a35c2c97\n}"
+  - "\nObject : NodeTransform : b9ca9782-7bb9-49ce-951e-be0c0b0f8d5d\n{\n\tm_Position\n\t{\n\t\tx
+    : 680\n\t\ty : -280\n\t}\n}"
+  - "\nObject : NodeEditorView : 2ce91d26-1ca8-469b-b959-10cb4acccb3c\n{\n\tm_Transform
+    : b9ca9782-7bb9-49ce-951e-be0c0b0f8d5d\n}"
+  - "\nObject : NodeTransform : 77f2cd26-2645-4b0c-8138-b72a58b69d3b\n{\n\tm_Position\n\t{\n\t\tx
+    : 780\n\t\ty : -480\n\t}\n}"
+  - "\nObject : NodeEditorView : 0416cc43-f011-43ad-b214-c49d629334c1\n{\n\tm_Transform
+    : 77f2cd26-2645-4b0c-8138-b72a58b69d3b\n}"
+  - "\nObject : NodeTransform : bc55bb6c-8246-4f32-a87d-a48b17ced0a1\n{\n\tm_Position\n\t{\n\t\tx
+    : 540\n\t\ty : -440\n\t}\n}"
+  - "\nObject : NodeEditorView : b7a47ae1-0a4d-4b31-a339-e4148297551e\n{\n\tm_Transform
+    : bc55bb6c-8246-4f32-a87d-a48b17ced0a1\n}"
+  - "\nObject : NodeTransform : e817615b-7ec5-49ad-b719-cbdeb4db28b5\n{\n\tm_Position\n\t{\n\t\tx
+    : 780\n\t\ty : -380\n\t}\n}"
+  - "\nObject : NodeEditorView : c31464b6-6f82-4a8e-9e4c-d0242a9aab65\n{\n\tm_Transform
+    : e817615b-7ec5-49ad-b719-cbdeb4db28b5\n}"
+  - "\nObject : NodeGraphEditor : 27d55429-1d63-40d8-a955-9f4e87b49176\n{\n\tm_RegisteredNodes\n\t{\n\t\tElement0\n\t\t{\n\t\t\tKey
+    : 48a15108-d1df-423f-8842-1dd13d1f5af2\n\t\t\tValue : 0416cc43-f011-43ad-b214-c49d629334c1\n\t\t}\n\t\tElement1\n\t\t{\n\t\t\tKey
+    : a2343fa6-5933-4286-b88d-cb72cc050d20\n\t\t\tValue : b7a47ae1-0a4d-4b31-a339-e4148297551e\n\t\t}\n\t\tElement2\n\t\t{\n\t\t\tKey
+    : f1441008-bec6-4f43-96e1-3c8c65cb9fba\n\t\t\tValue : c31464b6-6f82-4a8e-9e4c-d0242a9aab65\n\t\t}\n\t}\n\tm_SubGraphNodeEditors\n\t{\n\t}\n\tm_ZoomScale
+    : 0,9411151\n\tm_ZoomCordsOrigin\n\t{\n\t\tx : 355,6964\n\t\ty : -731,5433\n\t}\n\tm_IsSubGraph
+    : True\n}"
+  - "\nObject : NodeGraphEditor : c55a6127-3b95-4ccd-b0e6-e2467c28d026\n{\n\tm_RegisteredNodes\n\t{\n\t\tElement0\n\t\t{\n\t\t\tKey
+    : 80a53d91-4f6d-40b0-9ae6-fabf9c48fb80\n\t\t\tValue : 87a14e09-9ccd-4512-b4f4-0c95fe77abe9\n\t\t}\n\t\tElement1\n\t\t{\n\t\t\tKey
+    : ebcd6cce-729b-4be3-a8eb-69735148fc35\n\t\t\tValue : 2ce91d26-1ca8-469b-b959-10cb4acccb3c\n\t\t}\n\t}\n\tm_SubGraphNodeEditors\n\t{\n\t\tElement0\n\t\t{\n\t\t\tKey
+    : 80a53d91-4f6d-40b0-9ae6-fabf9c48fb80\n\t\t\tValue : 27d55429-1d63-40d8-a955-9f4e87b49176\n\t\t}\n\t}\n\tm_ZoomScale
+    : 1,265278\n\tm_ZoomCordsOrigin\n\t{\n\t\tx : 516,7747\n\t\ty : -599,6157\n\t}\n\tm_IsSubGraph
+    : False\n}"
+  m_NodeGraph: {fileID: 11400000, guid: 9c824c97545fef24186b12551a5df6d2, type: 2}

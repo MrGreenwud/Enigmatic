@@ -3,6 +3,8 @@ namespace Enigmatic.KFInputSystem
     public enum InputTag
     {
         Move,
+        Run,
+        Crouch,
         Jump,
         
     }
@@ -13,3 +15,4 @@ namespace Enigmatic.KFInputSystem
         
     }
 }
+

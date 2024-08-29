@@ -314,6 +314,43 @@ public static class FileEditor
 
         return file;
     }
+
+    public static string ReadLines(this string[] stringsArray, int start, int end)
+    {
+        string result = string.Empty;
+
+        for (int i = start; i <= end; i++)
+            result += $"{stringsArray[i]}\n";
+
+        return result;
+    }
+
+    public static string[] SplitArea(this string text, int startLineNumber, int areaLineCount)
+    {
+        string[] lines = text.Split("\n");
+
+        List<string> result = new List<string>();
+
+        string tempResult = string.Empty;
+
+        int j = 0;
+
+        for (int i = startLineNumber; i < lines.Length; i++)
+        {
+            tempResult += $"{lines[i]}\n";
+
+            j++;
+
+            if (j == areaLineCount)
+            {
+                result.Add(tempResult);
+                tempResult = string.Empty;
+                j = 0;
+            }
+        }
+
+        return result.ToArray();
+    }
 }
 
 /*

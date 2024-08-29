@@ -77,15 +77,15 @@ public class Animation
 
     public object Sender { get; private set; }
 
-    protected bool m_isFinish { get; private set; }
-    protected bool m_isWaitDestroy { get; private set; }
+    protected bool m_IsFinish { get; private set; }
+    protected bool m_IsWaitDestroy { get; private set; }
 
-    protected bool m_isSafely { get; private set; }
+    protected bool m_IsSafely { get; private set; }
 
     public Animation Safely(object sender)
     {
         Sender = sender;
-        m_isSafely = true;
+        m_IsSafely = true;
 
         return this;
     }
@@ -141,22 +141,22 @@ public class Animation
     protected void Finished()
     {
         OnFinished?.Invoke();
-        m_isFinish = true;
+        m_IsFinish = true;
     }
 
     protected void Destroyed()
     {
         OnDestroyed?.Invoke(this);
-        m_isWaitDestroy = true;
+        m_IsWaitDestroy = true;
     }
 
     protected bool CheckSelfly()
     {
-        if (m_isSafely == true)
+        if (m_IsSafely == true)
         {
             if (Sender.ToString() == "null")
             {
-                Kill();
+                //Kill();
                 return false;
             }
         }
@@ -169,7 +169,7 @@ public class ScriptedAnimation : Animation
 {
     public virtual void Tick() 
     {
-        if (m_isFinish == true || m_isWaitDestroy == true)
+        if (m_IsFinish == true || m_IsWaitDestroy == true)
             return;
 
         if (CheckSelfly() == false)

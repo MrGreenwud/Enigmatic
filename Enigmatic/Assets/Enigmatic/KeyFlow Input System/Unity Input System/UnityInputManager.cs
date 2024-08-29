@@ -1,13 +1,13 @@
 ﻿using UnityEditor;
 
-namespace KFInputSystem.Utility
+namespace Enigmatic.KFInputSystem.Editor
 {
     public static class UnityInputManager
     {
         public static void AddAxis(InputAxis axis)
         {
             SerializedObject inputManager = new SerializedObject
-            (AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0]);
+                (AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset")[0]);
 
             SerializedProperty axesProperty = inputManager.FindProperty("m_Axes");
 
