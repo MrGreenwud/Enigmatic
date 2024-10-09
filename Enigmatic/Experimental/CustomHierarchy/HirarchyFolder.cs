@@ -20,7 +20,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
         public void OnValidate()
         {
             m_Color.a = 1;
-            CustomHierarchy.UpdateFolderIcon(this);
+            Hierarchy.UpdateFolderIcon(this);
         }
     }
 }

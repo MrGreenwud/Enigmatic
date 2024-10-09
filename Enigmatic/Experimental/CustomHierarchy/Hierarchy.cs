@@ -9,7 +9,7 @@ using Enigmatic.Core;
 namespace Enigmatic.Experimental.CustomHierarchy
 {
     [InitializeOnLoad]
-    internal static class CustomHierarchy
+    internal static class Hierarchy
     {
         public static bool isEnabled = true;
         private static bool sm_IsInit;
@@ -22,6 +22,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
         private static object treeViewControllerInstance;
 
         private static MethodInfo GetExpandedIDsMethod;
+        private static MethodInfo IsSelectedIDsMethod;
         private static PropertyInfo ShowingVerticalScrollBarProperty;
 
         private static Dictionary<GameObject, KeyValuePair<Color, GUIStyle>> sm_IsFolders = new Dictionary<GameObject, KeyValuePair<Color, GUIStyle>>();
@@ -30,8 +31,9 @@ namespace Enigmatic.Experimental.CustomHierarchy
         private static float sm_CurrentViewWidth;
 
         private static bool ShowingVerticalScrollBar => (bool)ShowingVerticalScrollBarProperty.GetValue(treeViewControllerInstance);
+        private static bool IsSelected(int id) => (bool)IsSelectedIDsMethod.Invoke(treeViewControllerInstance, new object[] { id });
 
-        static CustomHierarchy()
+        static Hierarchy()
         {
             EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
             EditorApplication.hierarchyChanged += UpdateHierarchy;
@@ -75,6 +77,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
             treeViewControllerInstance = treeViewControllerField.GetValue(sceneHierarchyInstance);
 
             ShowingVerticalScrollBarProperty = treeViewControllerType.GetProperty("showingVerticalScrollBar", BindingFlags.Instance | BindingFlags.Public);
+            IsSelectedIDsMethod = treeViewControllerType.GetMethod("IsSelected", BindingFlags.Instance | BindingFlags.Public);
 
             sm_IsInit = true;
         }
@@ -101,7 +104,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
             PrefabInstanceStatus prefabInstanceStatus = PrefabUtility.GetPrefabInstanceStatus(gameObject);
 
             bool isPrefabConnected = prefabInstanceStatus == PrefabInstanceStatus.Connected && IsPrefabRoot(gameObject);
-            bool isSelected = CheckIsSelected(gameObject);
+            bool isSelected = IsSelected(instanceID); //CheckIsSelected(gameObject);
             bool isSpliter = sm_IsSpliters.ContainsKey(gameObject);
             bool isFolder = sm_IsFolders.ContainsKey(gameObject);
 
@@ -192,7 +195,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
                 int index = Mathf.FloorToInt(selectionRect.y / selectionRect.height);
                 Color backgroundColor = EnigmaticStyles.BackgroundColor;
 
-                if (index % 2 != 0)
+                if (index % 2 == 0)
                     backgroundColor = EnigmaticStyles.DarkedBackgroundColor;
 
                 EditorGUI.DrawRect(selectionRect, backgroundColor);
@@ -215,7 +218,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
             if (gameObject.transform.childCount == 0)
                 return;
 
-            Rect iconRect = new Rect(selectionRect.x - 14, selectionRect.y - 1, 18, 18);
+            Rect iconRect = new Rect(selectionRect.x - 17, selectionRect.y - 1, 18, 18);
 
             if (isExpanded)
                 EditorGUI.LabelField(iconRect, "", EnigmaticStyles.foldoutButtonOpen);
@@ -227,7 +230,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
         {
             if (sm_IsFolders.ContainsKey(gameObject))
             {
-                Rect rect = new Rect(selectionRect.x - 1, selectionRect.y - 2, 21, 21);
+                Rect rect = new Rect(selectionRect.x - 1, selectionRect.y - 1, 19, 19);
                 GUI.Box(rect, "", sm_IsFolders[gameObject].Value);
             }
             else if (sm_IsSpliters.ContainsKey(gameObject))
@@ -236,12 +239,12 @@ namespace Enigmatic.Experimental.CustomHierarchy
             }
             else if (isPrefabConnected && isSelected == false)
             {
-                Rect rect = new Rect(selectionRect.x, selectionRect.y - 1, 20, 20);
+                Rect rect = new Rect(selectionRect.x - 2, selectionRect.y - 1, 19, 19);
                 GUI.Box(rect, "", EnigmaticStyles.gameObjectPrefabIcon);
             }
             else
             {
-                Rect rect = new Rect(selectionRect.x, selectionRect.y - 1, 20, 20);
+                Rect rect = new Rect(selectionRect.x - 2, selectionRect.y - 1, 19, 19);
                 EditorGUI.LabelField(rect, "", EnigmaticStyles.gameObjectIcon);
             }
         }
@@ -249,7 +252,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
         private static void DrawObjectName(GameObject gameObject, Rect selectionRect, 
             bool isSelected, bool isFolder, bool isSplitter, bool isPrefabConnected)
         {
-            Rect rect = new Rect(selectionRect.x + 20, selectionRect.y, selectionRect.width - 78, selectionRect.height);
+            Rect rect = new Rect(selectionRect.x + 16, selectionRect.y, selectionRect.width - 78, selectionRect.height);
             GUIStyle objectNameStyle = EditorStyles.label;
 
             if (isSplitter)
@@ -306,7 +309,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
         {
             if (gameObject.transform.childCount == 0 && gameObject.transform.parent != null)
             {
-                Rect rect = new Rect(selectionRect.x - 14, selectionRect.y - 1, 18, 19);
+                Rect rect = new Rect(selectionRect.x - 14, selectionRect.y, 14, 16);
 
                 if (CheckIsLastOnParent(gameObject))
                     GUI.Box(rect, "", EnigmaticStyles.treeHierarchyEnd);
@@ -323,7 +326,7 @@ namespace Enigmatic.Experimental.CustomHierarchy
                     if (i == 0 || CheckIsLastOnParentByDepth(gameObject, i))
                         continue;
 
-                    Rect rect = new Rect(selectionRect.x - 14 * (i + 1), selectionRect.y - 1, 18, 19);
+                    Rect rect = new Rect(selectionRect.x - 14 * (i + 1), selectionRect.y, 14, 16);
                     GUI.Box(rect, "", EnigmaticStyles.treeHierarchyContinue);
                 }
             }
@@ -421,18 +424,6 @@ namespace Enigmatic.Experimental.CustomHierarchy
             var windowType = typeof(Editor).Assembly.GetType("UnityEditor.SceneHierarchyWindow");
             var windows = Resources.FindObjectsOfTypeAll(windowType);
             return windows.Length > 0 ? windows[0] : null;
-        }
-    }
-
-    public struct SelectedData
-    {
-        public GameObject GameObject;
-        public string ElementName;
-
-        public SelectedData(GameObject gameObject, string elmentName)
-        {
-            GameObject = gameObject;
-            ElementName = elmentName;
         }
     }
 }
