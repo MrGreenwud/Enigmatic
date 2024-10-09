@@ -1,0 +1,26 @@
+KFInput_System : order{0} 
+[ 
+    JoystickButton
+    [ 
+        JoystickButton0 
+        JoystickButton1 
+        JoystickButton2 
+        JoystickButton3 
+        JoystickButton4 
+        JoystickButton5 
+        JoystickButton6 
+        JoystickButton7 
+        JoystickButton8 
+        JoystickButton9 
+        JoystickButton10 
+        JoystickButton11 
+        JoystickButton12 
+        JoystickButton13 
+        JoystickButton14 
+        JoystickButton15 
+        JoystickButton16 
+        JoystickButton17 
+        JoystickButton18 
+        JoystickButton19 
+    ] 
+]

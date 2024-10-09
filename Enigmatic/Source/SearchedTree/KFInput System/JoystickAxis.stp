@@ -1,0 +1,11 @@
+KFInput_System : order{0} 
+[ 
+    JoystickAxis
+    [ 
+        None 
+        LeftStickX 
+        LeftStickY 
+        RightStickX 
+        RightStickY 
+    ] 
+]

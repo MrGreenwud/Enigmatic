@@ -1,0 +1,10 @@
+KFInput_System : order{0} 
+[ 
+    MouseAxis
+    [ 
+        None 
+        MouseX 
+        MouseY 
+        ScrollWheel 
+    ] 
+]

@@ -1,0 +1,17 @@
+KFInput_System : order{0} 
+[ 
+    Input_Type
+    [ 
+        Button
+        [ 
+            Hold 
+            Down 
+            Up 
+        ] 
+        Axis
+        [ 
+            Vector2 
+            Value 
+        ] 
+    ] 
+]

@@ -1,0 +1,8 @@
+KFInput_System : order{0} 
+[ 
+    AxisType
+    [ 
+        Buttons 
+        Value 
+    ] 
+]
