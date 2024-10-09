@@ -1,5 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Enigmatic.Core
@@ -15,6 +14,10 @@ namespace Enigmatic.Core
 
         private static GUIStyle sm_AddButton;
         private static GUIStyle sm_SubstractButton;
+
+        private static GUIStyle sm_ColumBackground;
+        private static GUIStyle sm_ColumBackgroundSelected;
+        private static GUIStyle sm_ToolbarButton;
 
         private static Color sm_DarkThemeBlue = new Color(0.227f, 0.447f, 0.690f, 1);
         private static Color sm_AltDarkThemeBlue = new Color(0.2724f, 0.5364f, 0.828f, 1);
@@ -143,6 +146,64 @@ namespace Enigmatic.Core
                 }
 
                 return sm_SubstractButton;
+            }
+        }
+
+        public static GUIStyle columBackground
+        {
+            get
+            {
+                if(sm_ColumBackground == null)
+                {
+                    sm_ColumBackground = new GUIStyle(GUI.skin.box);
+                    sm_ColumBackground.normal.textColor = GUI.skin.label.normal.textColor;
+
+                    //sm_ColumBackground.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/ColumBackground.png") as Texture2D;
+                    sm_ColumBackground.normal.background = EditorGUIUtility.Load(EnigmaticData.GetUnityPath(EnigmaticData.GetPath
+                        (EnigmaticData.textures, "ColumBackground.png"))) as Texture2D;
+
+                    sm_ColumBackground.border = new RectOffset(4, 4, 4, 4); // Регулируйте отступы, чтобы избежать обрезания текста
+                    sm_ColumBackground.padding = new RectOffset(2, 2, 2, 2); // Регулируйте отступы, чтобы избежать обрезания текста
+                }
+
+                return sm_ColumBackground;
+            }
+        }
+
+        public static GUIStyle columBackgroundSelected
+        {
+            get
+            {
+                if (sm_ColumBackgroundSelected == null)
+                {
+                    sm_ColumBackgroundSelected = new GUIStyle(GUI.skin.box);
+                    sm_ColumBackgroundSelected.normal.textColor = GUI.skin.label.normal.textColor;
+
+                    sm_ColumBackgroundSelected.normal.background = EditorGUIUtility.Load(EnigmaticData.GetUnityPath(EnigmaticData
+                        .GetPath(EnigmaticData.textures, "ColumBackgroundSelected.png"))) as Texture2D;
+
+                    sm_ColumBackgroundSelected.border = new RectOffset(4, 4, 4, 4); // Регулируйте отступы, чтобы избежать обрезания текста
+                    sm_ColumBackgroundSelected.padding = new RectOffset(2, 2, 2, 2); // Регулируйте отступы, чтобы избежать обрезания текста
+                }
+
+                return sm_ColumBackgroundSelected;
+            }
+        }
+
+        public static GUIStyle toolbarButton
+        { 
+            get
+            {
+                if(sm_ToolBarButton == null)
+                {
+                    sm_ToolBarButton = new GUIStyle(EditorStyles.label);
+                    sm_ToolBarButton.normal.textColor = GUI.skin.label.normal.textColor;
+                    sm_ToolBarButton.alignment = TextAnchor.MiddleCenter;
+                    sm_ToolBarButton.fontStyle = FontStyle.Bold;
+                    sm_ToolBarButton.fontSize = 20;
+                }
+
+                return sm_ToolBarButton;
             }
         }
 
