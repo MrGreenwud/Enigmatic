@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEditor;
 using Unity.VisualScripting;
 
+using Enigmatic.Core;
+
 namespace Enigmatic.Experimental.ENIX
 {
     // *.enix
