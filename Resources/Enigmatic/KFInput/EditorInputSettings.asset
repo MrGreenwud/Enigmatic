@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1cdd6865be34174a9c228bad0b3bb99, type: 3}
+  m_Name: EditorInputSettings
+  m_EditorClassIdentifier: 
+  m_SerializedObject:
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : 92adc2fc-96c5-445d-af80-d433f8896399\n{\n\tAxis
+    : None\n\tPosetiveButton : D\n\tNegativeButton : A\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : 79c6c5b3-1c12-4c55-9fb8-6bc773c59ebf\n{\n\tAxis
+    : None\n\tPosetiveButton : W\n\tNegativeButton : S\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFInputSettings : 5ddc46ac-d053-495f-ab68-539d802c79f5\n{\n\tDevice
+    : Keyboard\n\tGravity : 3\n\tDead : 0,0001\n\tSensitivity : 3\n\tButton : None\n\tm_HorizontalAxis
+    : 92adc2fc-96c5-445d-af80-d433f8896399\n\tm_VerticalAxis : 79c6c5b3-1c12-4c55-9fb8-6bc773c59ebf\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : 23907b83-47db-48db-a75f-7f0319dd3214\n{\n\tAxis
+    : LeftStickX\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : 457786c6-3e6a-4d21-93b3-5f23ad06ca10\n{\n\tAxis
+    : LeftStickY\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFInputSettings : 88a02552-7efd-4373-afb3-e44399b8f5b4\n{\n\tDevice
+    : Joystick\n\tGravity : 3\n\tDead : 0,0001\n\tSensitivity : 3\n\tButton : None\n\tm_HorizontalAxis
+    : 23907b83-47db-48db-a75f-7f0319dd3214\n\tm_VerticalAxis : 457786c6-3e6a-4d21-93b3-5f23ad06ca10\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : 38799e07-6013-4d04-8097-50ad746af695\n{\n\tAxis
+    : None\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : b4dd98b8-433b-498a-94f8-811ba9949d35\n{\n\tAxis
+    : None\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFInputSettings : 3a14a7ed-4926-46fa-ab8f-2962eb6c0bff\n{\n\tDevice
+    : Mobile\n\tGravity : 3\n\tDead : 0,0001\n\tSensitivity : 3\n\tButton : None\n\tControlGUID
+    : 82e78eec-fb8e-4fcb-a11e-4090723895b1\n\tm_HorizontalAxis : 38799e07-6013-4d04-8097-50ad746af695\n\tm_VerticalAxis
+    : b4dd98b8-433b-498a-94f8-811ba9949d35\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFInput : de111f52-1ab0-43a4-aa28-f03b981fd0ac\n{\n\tTag
+    : Move\n\tType : Axis/Vector2\n\tm_KeyboardAndMouse : 5ddc46ac-d053-495f-ab68-539d802c79f5\n\tm_Joystick
+    : 88a02552-7efd-4373-afb3-e44399b8f5b4\n\tm_Mobile : 3a14a7ed-4926-46fa-ab8f-2962eb6c0bff\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : aa8da03b-3601-4f61-854b-96c4e43b6f6c\n{\n\tAxis
+    : MouseX\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : 367d18c3-a6ab-45d9-b970-b00727ebfc70\n{\n\tAxis
+    : MouseY\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFInputSettings : 0985c510-174e-4c2e-b1d4-be9a08526b90\n{\n\tDevice
+    : Mouse\n\tGravity : 3\n\tDead : 0,0001\n\tSensitivity : 3\n\tButton : None\n\tm_HorizontalAxis
+    : aa8da03b-3601-4f61-854b-96c4e43b6f6c\n\tm_VerticalAxis : 367d18c3-a6ab-45d9-b970-b00727ebfc70\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : 60382db0-7b71-423d-961c-dd06065f67ff\n{\n\tAxis
+    : None\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : c2cd05b0-b4ed-4a0f-9a36-14d8bdc0a66c\n{\n\tAxis
+    : None\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFInputSettings : 626cb95d-2ceb-43a4-aefb-c98a27fc5875\n{\n\tDevice
+    : Joystick\n\tGravity : 3\n\tDead : 0,0001\n\tSensitivity : 3\n\tButton : None\n\tm_HorizontalAxis
+    : 60382db0-7b71-423d-961c-dd06065f67ff\n\tm_VerticalAxis : c2cd05b0-b4ed-4a0f-9a36-14d8bdc0a66c\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : d099996a-4798-49e6-9b7c-a7addd77a7db\n{\n\tAxis
+    : None\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFAxisSettings : 50c09f00-557f-4e9b-baef-8445db2a46de\n{\n\tAxis
+    : None\n\tPosetiveButton : None\n\tNegativeButton : None\n\tType : Value\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFInputSettings : dd353847-f765-44e6-909d-7feb8ef7616e\n{\n\tDevice
+    : Mobile\n\tGravity : 3\n\tDead : 0,0001\n\tSensitivity : 3\n\tButton : None\n\tm_HorizontalAxis
+    : d099996a-4798-49e6-9b7c-a7addd77a7db\n\tm_VerticalAxis : 50c09f00-557f-4e9b-baef-8445db2a46de\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.KFInput : 8db03a7a-1539-490a-bb50-1f083b4ff717\n{\n\tTag
+    : New Input\n\tType : Axis/Vector2\n\tm_KeyboardAndMouse : 0985c510-174e-4c2e-b1d4-be9a08526b90\n\tm_Joystick
+    : 626cb95d-2ceb-43a4-aefb-c98a27fc5875\n\tm_Mobile : dd353847-f765-44e6-909d-7feb8ef7616e\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.InputMapSettings : 8057efe9-b4d6-4e92-90d1-72d1650338f7\n{\n\tName
+    : Gameplay\n\tkFInputs\n\t{\n\t\tElement0 : de111f52-1ab0-43a4-aa28-f03b981fd0ac\n\t\tElement1
+    : 8db03a7a-1539-490a-bb50-1f083b4ff717\n\t}\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.Editor.InputMaps : ede76a1d-666f-4de1-a0fc-dab2cfec26da\n{\n\tm_InputMaps\n\t{\n\t\tElement0
+    : 8057efe9-b4d6-4e92-90d1-72d1650338f7\n\t}\n}"

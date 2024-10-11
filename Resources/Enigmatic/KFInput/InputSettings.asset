@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1cdd6865be34174a9c228bad0b3bb99, type: 3}
+  m_Name: InputSettings
+  m_EditorClassIdentifier: 
+  m_SerializedObject:
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.KFInputAxis2D : 671c4db8-87e1-403e-a9de-4a0eb993fa48\n{\n\tp_Tag
+    : Move (Gameplay)\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.KFInputAxis2D : dc866517-b270-4e3a-b52c-22040b3528e4\n{\n\tp_Tag
+    : New Input (Gameplay)\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.InputMap : 92145b04-2d91-4bdf-8774-996dd50f1a29\n{\n\tm_InputButtonDown\n\t{\n\t}\n\tm_InputButtonUp\n\t{\n\t}\n\tm_InputButtonHold\n\t{\n\t}\n\tm_InputAxis\n\t{\n\t}\n\tm_InputAxis2D\n\t{\n\t\tElement0\n\t\t{\n\t\t\tKey
+    : Move\n\t\t\tValue : 671c4db8-87e1-403e-a9de-4a0eb993fa48\n\t\t}\n\t\tElement1\n\t\t{\n\t\t\tKey
+    : New Input\n\t\t\tValue : dc866517-b270-4e3a-b52c-22040b3528e4\n\t\t}\n\t}\n}"
+  - "\nObject : Enigmatic.Experimental.KFInputSystem.InputMapsProvider : 6c88157f-8ff7-4b09-bacc-0196f714d954\n{\n\tm_Maps\n\t{\n\t\tElement0\n\t\t{\n\t\t\tKey
+    : Gameplay\n\t\t\tValue : 92145b04-2d91-4bdf-8774-996dd50f1a29\n\t\t}\n\t}\n}"
