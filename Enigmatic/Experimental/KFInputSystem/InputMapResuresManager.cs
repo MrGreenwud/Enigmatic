@@ -7,6 +7,7 @@ using UnityEditor;
 
 using Enigmatic.Experimental.ENIX;
 using Enigmatic.Experimental.KFInputSystem.Editor;
+using Enigmatic.Core;
 
 namespace Enigmatic.Experimental.KFInputSystem
 {

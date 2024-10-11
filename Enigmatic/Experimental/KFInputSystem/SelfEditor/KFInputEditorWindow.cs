@@ -30,7 +30,7 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
         private bool m_IsXAxisExpanded = true;
         private bool m_IsYAxisExpanded = true;
 
-        [MenuItem("Tools/Enigmatic/TEST KFInput")]
+        [MenuItem("Tools/Enigmatic/KFInput")]
         public static void Open()
         {
             KFInputEditorWindow window = GetWindow<KFInputEditorWindow>();
@@ -401,7 +401,7 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
             float width = EnigmaticGUILayout.GetActiveGrup().GetFreeArea().x;
 
             SearchedTreeListProvider inputAxisProvider = SearchedTreeListProvider
-                .Create("KFInput_System", "MouseAxis", $"mouse{axisName}");
+                .Create("KFInput_System", "MouseAxis", $"mouse{axisName.Replace(" ", string.Empty)}");
 
             inputAxisProvider.OnSelected += OnSelected;
 
@@ -528,6 +528,12 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
                     break;
                 case "joystickAxisY":
                     input.GetInputSettings(Device.Joystick).VerticalAxis.Axis = value;
+                    break;
+                case "mouseAxisX":
+                    input.GetInputSettings(Device.KeyboardAndMouse).HorizontalAxis.Axis = value;
+                    break;
+                case "mouseAxisY":
+                    input.GetInputSettings(Device.KeyboardAndMouse).VerticalAxis.Axis = value;
                     break;
                 default:
                     Debug.LogError("");
