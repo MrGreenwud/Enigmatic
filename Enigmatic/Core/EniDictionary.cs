@@ -6,23 +6,16 @@ using UnityEngine;
 namespace Enigmatic.Core
 {
     [Serializable]
-    public class EniDictionary<TKey, TValue>
+    public class EniDictionary<TKey, TValue> : List<EniKeyValuePair<TKey, TValue>>
     {
-        [SerializeField] private EniKeyValuePair<TKey, TValue>[] m_Elements;
-
         public Dictionary<TKey, TValue> ToDictionary()
         {
-            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>(m_Elements.Length);
+            Dictionary<TKey, TValue> result = new Dictionary<TKey, TValue>(Count);
 
-            foreach(EniKeyValuePair<TKey, TValue> pair in m_Elements)
+            foreach(EniKeyValuePair<TKey, TValue> pair in this)
                 result.Add(pair.Key, pair.Value);
 
             return result;
-        }
-
-        public void Clear()
-        {
-            m_Elements = new EniKeyValuePair<TKey, TValue>[0];
         }
     }
 

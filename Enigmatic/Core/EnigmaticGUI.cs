@@ -37,7 +37,7 @@ namespace Enigmatic.Core
         Horizontal,
     }
 
-    public class GUIGrup : GUIElement
+    public class GUIGrup: GUIElement
     {
         public static ProfilerMarker CalculateGrupSize = new ProfilerMarker(ProfilerCategory.Render, "CalculateGrupSize");
 
@@ -271,7 +271,7 @@ namespace Enigmatic.Core
         }
     }
 
-    public class ScrollView : GUIGrup
+    public class ScrollView: GUIGrup
     {
         public Rect ViewRect { get; private set; }
         public Vector2 ScrollPosition { get; private set; }
@@ -427,7 +427,7 @@ namespace Enigmatic.Core
 
     }
 
-    public static class GUIElementDrawer
+    public static class GUIElementPostDrawer
     {
         /// <summary>
         /// 0 - text, 1 - position, 2 - style
@@ -525,18 +525,12 @@ namespace Enigmatic.Core
         public static void TextField(object[] parameters)
         {
             if (parameters.Length < 4)
-                return;
+                throw new ArgumentException();
 
             Rect rect = (Rect)parameters[0];
             int guid = (int)parameters[1];
 
             string value = (string)parameters[2];
-
-            //if (GUIValueCasher.TryGetValue(guid, out object v))
-            //{
-            //    value = (string)v;
-            //}
-
             string name = (string)parameters[3];
 
             string newValue = value;
@@ -581,6 +575,27 @@ namespace Enigmatic.Core
         }
 
         /// <summary>
+        /// 0 - position, 1 - fieldWidth,  2 - fieldName, 3- obj, 4 - objectType, 5 - guid
+        /// </summary>
+        public static void ObjectField(object[] parameters)
+        {
+            if(parameters.Length < 6)
+                throw new ArgumentException();
+
+            Vector2 position = (Vector2)parameters[0];
+            float fieldWidth = (float)parameters[1];
+            string fieldName = (string)parameters[2];
+            UnityEngine.Object obj = (UnityEngine.Object)parameters[3];
+            Type objectType = (Type)parameters[4];
+            int guid = (int)parameters[5];
+
+            UnityEngine.Object value = EnigmaticGUI.ObjectField(position, fieldWidth, fieldName, obj, objectType);
+
+            if (obj != value)
+                GUIValueCasher.CashValue(guid, value);
+        }
+
+        /// <summary>
         /// 0 - SerializedProperty, 1 - Rect
         /// </summary>
         public static void EPropertyField(object[] parameters)
@@ -614,70 +629,75 @@ namespace Enigmatic.Core
     {
         public static PostActionCaller Lable(string text, Vector2 position, GUIStyle style = null)
         {
-            Action<object[]> action = GUIElementDrawer.Lable;
+            Action<object[]> action = GUIElementPostDrawer.Lable;
             return PostActionCallerPool.GetCaller(action, text, position, style);
         }
 
         public static PostActionCaller Image(Rect rect, GUIStyle style = null)
         {
-            Action<object[]> action = GUIElementDrawer.Image;
+            Action<object[]> action = GUIElementPostDrawer.Image;
             return PostActionCallerPool.GetCaller(action, rect, style);
         }
 
         public static PostActionCaller Button(Rect rect, string text = "", GUIStyle style = null)
         {
-            Action<object[]> action = GUIElementDrawer.Button;
+            Action<object[]> action = GUIElementPostDrawer.Button;
             return PostActionCallerPool.GetCaller(action, rect, text, style);
         }
 
         public static PostActionCaller FloatField(Rect rect, int guid, float value, string name = "")
         {
-            Action<object[]> action = GUIElementDrawer.FloatField;
+            Action<object[]> action = GUIElementPostDrawer.FloatField;
             return PostActionCallerPool.GetCaller(action, rect, guid, value, name);
         }
 
         public static PostActionCaller IntField(Rect rect, int guid, int value, string name = "")
         {
-            Action<object[]> action = GUIElementDrawer.IntField;
+            Action<object[]> action = GUIElementPostDrawer.IntField;
             return PostActionCallerPool.GetCaller(action, rect, guid, value, name);
         }
 
         public static PostActionCaller TextField(Rect rect, int guid, string value, string name = "")
         {
             object[] parametors = { rect, guid, value, name };
-            Action<object[]> action = GUIElementDrawer.TextField;
+            Action<object[]> action = GUIElementPostDrawer.TextField;
             return PostActionCallerPool.GetCaller(action, rect, guid, value, name);
         }
 
         public static PostActionCaller Grup(GUIGrup grup, int border = 0)
         {
-            Action<object[]> action = GUIElementDrawer.Grup;
+            Action<object[]> action = GUIElementPostDrawer.Grup;
             return PostActionCallerPool.GetCaller(action, grup, border);
         }
 
-        public static PostActionCaller PropertyField(UnityEditor.SerializedProperty property, Rect rect, string fieldName = "")
+        public static PostActionCaller PropertyField(SerializedProperty property, Rect rect, string fieldName = "")
         {
-            Action<object[]> action = GUIElementDrawer.PropertyField;
+            Action<object[]> action = GUIElementPostDrawer.PropertyField;
             return PostActionCallerPool.GetCaller(action, property, rect, fieldName);
+        }
+
+        public static PostActionCaller ObjectField(Vector2 position, float fieldWidth, 
+            string fieldName, UnityEngine.Object obj, Type type, int guid)
+        {
+            Action<object[]> action = GUIElementPostDrawer.ObjectField;
+            return PostActionCallerPool.GetCaller(action, position, fieldWidth, fieldName, obj, type, guid);
         }
 
         public static PostActionCaller PropertyField(ESerializedProperty property, Rect rect)
         {
-            Action<object[]> action = GUIElementDrawer.EPropertyField;
+            Action<object[]> action = GUIElementPostDrawer.EPropertyField;
             return PostActionCallerPool.GetCaller(action, property, rect);
         }
 
         public static PostActionCaller Foldout(Rect rect, bool isExpanded, string displayName)
         {
-            Action<object[]> action = GUIElementDrawer.Foldout;
+            Action<object[]> action = GUIElementPostDrawer.Foldout;
             return PostActionCallerPool.GetCaller(action, rect, isExpanded, displayName);
         }
     }
 
     public static class EnigmaticGUILayout
     {
-        private static ProfilerMarker GrupManagment = new ProfilerMarker(ProfilerCategory.Render, "GrupManagment");
-        private static ProfilerMarker ElementManagment = new ProfilerMarker(ProfilerCategory.Render, "ElementManagment");
         private static ProfilerMarker DrawGrup = new ProfilerMarker(ProfilerCategory.Render, "DrawGrup");
 
         private static GUIGrup GUIActiveGrup;
@@ -1135,7 +1155,7 @@ namespace Enigmatic.Core
             GUIActiveGrup.AddElement(element);
         } //Old
 
-        public static void PropertyField(UnityEditor.SerializedProperty property, float widthFieldArea = -1, string fieldName = "")
+        public static void PropertyField(SerializedProperty property, float widthFieldArea = -1, string fieldName = "")
         {
             if (widthFieldArea == -1)
                 widthFieldArea = GUIActiveGrup.GetFreeArea().x - 6;
@@ -1148,6 +1168,27 @@ namespace Enigmatic.Core
             UpdateLastGUIRect(rect);
 
             sm_CallQueue.Enqueue(EnigmaticGUILayoutPostDrawerCaller.PropertyField(property, rect, fieldName));
+        }
+
+        public static UnityEngine.Object ObjectField(string filedName, UnityEngine.Object obj, Type objectType, float widthFieldArea = -1)
+        {
+            if (widthFieldArea == -1)
+                widthFieldArea = GUIActiveGrup.GetFreeArea().x - 6;
+
+            Vector2 position = GetNextPosition();
+            Rect rect = new Rect(position, CalculateSize(new Vector2(widthFieldArea, 18)));
+            GUIElement element = sm_ElementsPool.GetGUIElement(rect);
+            GUIActiveGrup.AddElement(element);
+
+            UpdateLastGUIRect(rect);
+
+            int guid = GUID.Next(filedName, rect, obj);
+            sm_CallQueue.Enqueue(EnigmaticGUILayoutPostDrawerCaller.ObjectField(position, widthFieldArea, filedName, obj, objectType, guid));
+
+            if (GUIValueCasher.TryGetValue(guid, out object result) == false)
+                result = obj;
+
+            return (UnityEngine.Object)result;
         }
 
         public static void PropertyField(ESerializedProperty property, float widthFieldArea = -1)
@@ -1357,7 +1398,7 @@ namespace Enigmatic.Core
             return guid;
         }
 
-        public static int Next(string guidControllName, Rect rect, string value)
+        public static int Next(string guidControllName, Rect rect, object value)
         {
             string combinedInput = $"{guidControllName}_{rect.x}_{rect.y}_{rect.width}_{rect.height}_{value}";
             return combinedInput.GetHashCode();
@@ -1491,7 +1532,7 @@ namespace Enigmatic.Core
             GUILayout.EndHorizontal();
         } //Delete
 
-        public static void PropertyField(Vector2 position, UnityEditor.SerializedProperty property, float fieldWidth, string fieldName = "")
+        public static void PropertyField(Vector2 position, SerializedProperty property, float fieldWidth, string fieldName = "")
         {
             float height = EditorGUI.GetPropertyHeight(property, true);
             Rect fieldRect = new Rect(position, new Vector2(fieldWidth, height));
@@ -1513,7 +1554,25 @@ namespace Enigmatic.Core
             UpdateLastGUIRect(new Rect(position, new Vector2(fieldWidth, height)));
 
             EditorGUIUtility.labelWidth = labelWidth;
-        } //Delete
+        }
+
+        public static UnityEngine.Object ObjectField(Vector2 position, float fieldWidth, 
+            string fieldName, UnityEngine.Object obj, Type objectType) 
+        {
+            float height = 18;
+            Rect fieldRect = new Rect(position, new Vector2(fieldWidth, height));
+
+            float labelWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = fieldWidth / 2;
+
+            UnityEngine.Object result = EditorGUI.ObjectField(fieldRect, new GUIContent(fieldName), obj, objectType, false);
+
+            UpdateLastGUIRect(fieldRect);
+
+            EditorGUIUtility.labelWidth = labelWidth;
+
+            return result;
+        }
 
         public static bool Foldout(Vector2 position, bool isExpanded, string displayName, float width,
             GUIStyle background = null, GUIStyle lable = null, GUIStyle foldout = null)
@@ -1878,11 +1937,11 @@ namespace Enigmatic.Core
             }
         }
 
-        public static void DrawProperty(UnityEditor.SerializedProperty property, bool drawChildren)
+        public static void DrawProperty(SerializedProperty property, bool drawChildren)
         {
             string lastPropertyPath = string.Empty;
 
-            foreach (UnityEditor.SerializedProperty p in property)
+            foreach (SerializedProperty p in property)
             {
                 if (p.isArray == true && p.propertyType == SerializedPropertyType.Generic)
                 {
