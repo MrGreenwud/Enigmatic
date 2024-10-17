@@ -9,8 +9,8 @@ using UnityEngine;
 using Unity.Profiling;
 using Unity.VisualScripting;
 
+using Enigmatic.Core.Editor;
 using Enigmatic.Experimental.ENIX;
-using Teststuff;
 
 namespace Enigmatic.Core
 {
@@ -1732,7 +1732,7 @@ namespace Enigmatic.Core
         {
             GUI.EndGroup();
 
-            Rect area = zoomendArea.ScaleSizeBy(1 / zoomSacle, zoomendArea.TopLeft());
+            Rect area = zoomendArea.ScaleSize(1 / zoomSacle);
             area.y += s_WindowTopPadding;
             GUI.BeginGroup(area);
 
@@ -2310,6 +2310,17 @@ namespace Enigmatic.Core
                 return null;
 
             return s_PropertyDrawers[type];
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class CustomPropertyDrawer : Attribute
+    {
+        public readonly Type PropertyType;
+
+        public CustomPropertyDrawer(Type propertyType)
+        {
+            PropertyType = propertyType;
         }
     }
 
