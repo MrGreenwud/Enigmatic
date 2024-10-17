@@ -98,7 +98,7 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
                     EnigmaticGUILayout.BeginVertical(EnigmaticStyles.columBackground, EnigmaticGUILayout.Width(m_CoumSize.x),
                         EnigmaticGUILayout.Height(m_CoumSize.y), EnigmaticGUILayout.Padding(0), EnigmaticGUILayout.ElementSpacing(0));
                     {
-                        DrawTitle("Maps", m_CoumSize.x, true, m_CoumSize.x - 97, m_kFInputEditor.AddInputMap, m_kFInputEditor.RemoveSelectionInputMap);
+                        DrawingUtilities.DrawTitle("Maps", m_CoumSize.x, true, m_CoumSize.x - 97, m_kFInputEditor.AddInputMap, m_kFInputEditor.RemoveSelectionInputMap);
 
                         Rect rect = EnigmaticGUILayout.GetActiveGrup().Rect;
 
@@ -120,7 +120,8 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
                         EnigmaticGUILayout.Height(m_CoumSize.y), EnigmaticGUILayout.Padding(0),
                         EnigmaticGUILayout.ExpandHeight(true));
                     {
-                        DrawTitle("Inputs", m_CoumSize.x, true, m_CoumSize.x - 100, m_kFInputEditor.AddInput, m_kFInputEditor.RemoveSelectionInput);
+                        DrawingUtilities.DrawTitle("Inputs", m_CoumSize.x, true, m_CoumSize.x - 100, 
+                            m_kFInputEditor.AddInput, m_kFInputEditor.RemoveSelectionInput);
 
                         Rect rect = EnigmaticGUILayout.GetActiveGrup().Rect;
 
@@ -128,8 +129,8 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
                         rect.width = m_CoumSize.x;
                         rect.height = m_CoumSize.y - 21;
 
-                        EnigmaticGUILayout.BeginVerticalScrollView(rect, rect, m_InputScrollPosition, EnigmaticGUILayout.Padding(0),
-                            EnigmaticGUILayout.ElementSpacing(-1));
+                        EnigmaticGUILayout.BeginVerticalScrollView(rect, rect, m_InputScrollPosition, 
+                            EnigmaticGUILayout.Padding(0),EnigmaticGUILayout.ElementSpacing(-1));
                         {
                             m_kFInputEditor.DrawInputs();
                         }
@@ -141,7 +142,7 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
                     EnigmaticGUILayout.BeginVertical(EnigmaticStyles.columBackground, EnigmaticGUILayout.Width(m_CoumSize.x + 3),
                         EnigmaticGUILayout.Height(m_CoumSize.y), EnigmaticGUILayout.Padding(0));
                     {
-                        DrawTitle("Settings", m_CoumSize.x + 3, false);
+                        DrawingUtilities.DrawTitle("Settings", m_CoumSize.x + 3, false);
                         DrawSetting();
                     }
                     EnigmaticGUILayout.EndVertical();
@@ -176,35 +177,6 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
             sm_Device = GetDevice(device);
 
             Repaint();
-        }
-
-        private void DrawTitle(string title, float width, bool drawAddRemoveButton = false,
-            float buttonSpace = 0, Action addAction = null, Action removeAction = null)
-        {
-            GUIStyle titleLable = new GUIStyle(EditorStyles.miniBoldLabel);
-            titleLable.fontSize = 12;
-
-            //Title
-            EnigmaticGUILayout.BeginHorizontal(EnigmaticStyles.columBackground, EnigmaticGUILayout.Width(width),
-                EnigmaticGUILayout.Height(22), EnigmaticGUILayout.Padding(0));
-            {
-                EnigmaticGUILayout.Space(2);
-                EnigmaticGUILayout.Lable(title, titleLable);
-
-                EnigmaticGUILayout.Space(buttonSpace);
-
-                if (drawAddRemoveButton)
-                {
-                    if (EnigmaticGUILayout.ButtonCentric("-", new Vector2(22, 20), new Vector2(0, -2), EnigmaticStyles.toolbarButton))
-                        removeAction?.Invoke();
-
-                    EnigmaticGUILayout.Space(-9);
-
-                    if (EnigmaticGUILayout.ButtonCentric("+", new Vector2(22, 20), new Vector2(0, -2), EnigmaticStyles.toolbarButton))
-                        addAction?.Invoke();
-                }
-            }
-            EnigmaticGUILayout.EndHorizontal();
         }
 
         private void DrawSetting()

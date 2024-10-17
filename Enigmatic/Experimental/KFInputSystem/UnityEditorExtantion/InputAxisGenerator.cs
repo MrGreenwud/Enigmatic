@@ -47,8 +47,8 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
             }
             else
             {
-                result.Add(new InputAxis($"{inputName}", input.Type, input.GetInputSettings(Device.KeyboardAndMouse), false));
-                result.Add(new InputAxis($"{inputName}", input.Type, input.GetInputSettings(Device.Joystick), false));
+                result.Add(new InputAxis($"{inputName}", input.Type, input.GetInputSettings(Device.KeyboardAndMouse), true));
+                result.Add(new InputAxis($"{inputName}", input.Type, input.GetInputSettings(Device.Joystick), true));
             }
 
             return result;
