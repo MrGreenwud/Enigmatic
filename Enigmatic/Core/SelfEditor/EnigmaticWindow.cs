@@ -17,19 +17,19 @@ namespace Enigmatic.Experimental.Window.Editor
             OnClose();
         }
 
-        private void OnGUI()
-        {
-            if (IsInit == false)
-            {
-                OnOpen();
-                IsInit = true;
-            }
+        //private void OnGUI()
+        //{
+        //    if (IsInit == false)
+        //    {
+        //        OnOpen();
+        //        IsInit = true;
+        //    }
 
-            EditorInput.UpdateInput();
-            EnigmaticGUILayout.Reset();
+        //    EditorInput.UpdateInput();
+        //    EnigmaticGUILayout.Reset();
 
-            Draw();
-        }
+        //    Draw();
+        //}
 
         protected virtual void OnOpen() { }
 

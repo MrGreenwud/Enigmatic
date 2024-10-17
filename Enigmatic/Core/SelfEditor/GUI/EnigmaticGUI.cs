@@ -10,6 +10,7 @@ using Unity.Profiling;
 using Unity.VisualScripting;
 
 using Enigmatic.Experimental.ENIX;
+using Teststuff;
 
 namespace Enigmatic.Core
 {
@@ -459,6 +460,20 @@ namespace Enigmatic.Core
         }
 
         /// <summary>
+        /// 0 - rect, 1 - color
+        /// </summary>
+        public static void Rect(object[] parameters)
+        {
+            if(parameters.Length < 2)
+                return;
+
+            Rect rect = (Rect)parameters[0];
+            Color color = (Color)parameters[1];
+
+            EnigmaticGUI.DrawRect(rect, color);
+        }
+
+        /// <summary>
         /// 0 - rect, 1 - text, 2 - style
         /// </summary>
         public static void Button(object[] parameters)
@@ -639,6 +654,12 @@ namespace Enigmatic.Core
             return PostActionCallerPool.GetCaller(action, rect, style);
         }
 
+        public static PostActionCaller Rect(Rect rect, Color color)
+        {
+            Action<object[]> action = GUIElementPostDrawer.Rect;
+            return PostActionCallerPool.GetCaller(action, rect, color);
+        }
+
         public static PostActionCaller Button(Rect rect, string text = "", GUIStyle style = null)
         {
             Action<object[]> action = GUIElementPostDrawer.Button;
@@ -772,7 +793,17 @@ namespace Enigmatic.Core
                 GUIActiveGrup.AddElement(grup);
 
             ChangeActiveGrup(grup);
-            //BeginGrup(grup);
+        }
+
+        public static void BeginHorizontal(Rect rect, bool isAddedGrup, params EnigmaticGUILayoutOption[] options)
+        {
+            GUIGrup grup = sm_GrupPool.GetGUIGrup(rect, GrupSortType.Horizontal);
+            grup.ApplyOptions(options);
+
+            if (GUIActiveGrup != null && isAddedGrup)
+                GUIActiveGrup.AddElement(grup);
+
+            ChangeActiveGrup(grup);
         }
 
         public static bool EndHorizontal()
@@ -849,12 +880,8 @@ namespace Enigmatic.Core
 
             GUIActiveGrup = scrollView;
 
-            sm_CallQueue.Enqueue((x) =>
-            {
-                ScrollView scrollView = x[0] as ScrollView;
-                EnigmaticGUIClip.BeginClip(scrollView.ViewRect);
-            },
-            scrollView);
+            Action beginClip = EnigmaticGUIClip.BeginClip(scrollView.ViewRect);
+            sm_CallQueue.Enqueue((x) => { beginClip?.Invoke(); });
         }
 
         public static void BeginScrollView(Rect rect, Rect viewRect, Vector2 scrollPosition,
@@ -892,7 +919,8 @@ namespace Enigmatic.Core
             if (result != scrollView.ScrollPosition)
                 action?.Invoke();
 
-            sm_CallQueue.Enqueue((x) => { EnigmaticGUIClip.EndClip(); });
+            Action endClip = EnigmaticGUIClip.EndClip();
+            sm_CallQueue.Enqueue((x) => { endClip?.Invoke(); });
 
             EndGrup();
             return result;
@@ -1001,13 +1029,13 @@ namespace Enigmatic.Core
 
             Event e = Event.current;
 
-            if(GUIActiveGrup is ScrollView scrollView)
-                rect.position += scrollView.ViewRect.position;
+            //if (GUIActiveGrup is ScrollView scrollView)
+            //    rect.position += scrollView.ViewRect.position;
 
             if (sm_IsClick == false)
                 return EnigmaticGUIUtility.OnClick(rect, 0);
-            else
-                return false;
+            
+            return false;
         }
 
         public static void Lable(string name, GUIStyle style = null)
@@ -1021,6 +1049,23 @@ namespace Enigmatic.Core
             UpdateLastGUIRect(rect);
 
             sm_CallQueue.Enqueue(EnigmaticGUILayoutPostDrawerCaller.Lable(name, position, style));
+        }
+
+        public static void CentircLable(string name, Vector2 offset, GUIStyle style = null)
+        {
+            BeginVertical(ElementSpacing(0), Padding(0));
+            {
+                Space(offset.x);
+
+                BeginHorizontal(ElementSpacing(0), Padding(0));
+                {
+                    Space(offset.y);
+
+                    Lable(name, style);
+                }
+                EndHorizontal();
+            }
+            EndVertical();
         }
 
         public static void Image(Vector2 size, GUIStyle style = null)
@@ -1055,6 +1100,31 @@ namespace Enigmatic.Core
             EndVertical();
 
             EndHorizontal();
+        }
+
+        public static void Rect(Vector2 size, Color color)
+        {
+            Vector2 position = GUIActiveGrup.GetNext().position;
+            Rect rect = new Rect(position, size);
+            //GUIElement element = sm_ElementsPool.GetGUIElement(rect);
+            //GUIActiveGrup.AddElement(element);
+
+            //UpdateLastGUIRect(rect);
+
+            sm_CallQueue.Enqueue(EnigmaticGUILayoutPostDrawerCaller.Rect(rect, color));
+        }
+
+        public static void Rect(Vector2 size, Vector2 offset, Color color)
+        {
+            Vector2 position = GUIActiveGrup.GetNext().position;
+            position += offset;
+            Rect rect = new Rect(position, size);
+            //GUIElement element = sm_ElementsPool.GetGUIElement(rect);
+            //GUIActiveGrup.AddElement(element);
+
+            //UpdateLastGUIRect(rect);
+
+            sm_CallQueue.Enqueue(EnigmaticGUILayoutPostDrawerCaller.Rect(rect, color));
         }
 
         public static void Port(Vector2 size, GUIStyle style = null)
@@ -1106,6 +1176,10 @@ namespace Enigmatic.Core
         public static string TextField(string name, string value, float widthFieldArea = -1)
         {
             Vector2 position = GetNextPosition() + Vector2.up;
+
+            if (widthFieldArea == -1)
+                widthFieldArea = GUIActiveGrup.GetFreeArea().x;
+
             Vector2 size = CalculateSize(widthFieldArea);
             Rect rect = new Rect(position, size);
             GUIActiveGrup.AddElement(sm_ElementsPool.GetGUIElement(rect));
@@ -1206,10 +1280,15 @@ namespace Enigmatic.Core
             sm_CallQueue.Enqueue(EnigmaticGUILayoutPostDrawerCaller.PropertyField(property, rect));
         } //Old
 
-        public static bool BeginFoldout(ref bool isExpanded, string displayName, Action repaintAction, float width = -1)
+        public static bool BeginFoldout(ref bool isExpanded, string displayName, Action repaintAction, 
+            GUIStyle foldoutBackground, float width = -1)
         {
-            BeginHorizontal(EnigmaticStyles.foldoutBackground, 7, Width(width), 
-                Clickable(true), ExpandHeight(true), Padding(0));
+            BeginVertical(Width(width), Padding(0), ElementSpacing(0), ExpandHeight(true));
+
+            if(foldoutBackground == null)
+                BeginHorizontal(Width(width), Clickable(true), ExpandHeight(true), Padding(0));
+            else
+                BeginHorizontal(foldoutBackground, 7, Width(width), Clickable(true), ExpandHeight(true), Padding(0));
             {
                 if (isExpanded)
                     Port(Vector2.one * 20, EnigmaticStyles.foldoutButtonOpen);
@@ -1225,13 +1304,19 @@ namespace Enigmatic.Core
             }
 
             if (isExpanded == false)
+            {
+                EndVertical();
                 return isExpanded;
-
-            Space(-14);
+            }
 
             BeginVertical(ExpandHeight(true), Width(width));
             
             return isExpanded;
+        }
+
+        public static bool BeginFoldout(ref bool isExpanded, string displayName, Action repaintAction, float width = -1)
+        {
+            return BeginFoldout(ref isExpanded, displayName, repaintAction, EnigmaticStyles.foldoutBackground, width);
         }
 
         public static void EndFoldout(bool isExpanded)
@@ -1239,6 +1324,7 @@ namespace Enigmatic.Core
             if(isExpanded == false)
                 return;
 
+            EndVertical();
             EndVertical();
         }
 
@@ -1564,8 +1650,10 @@ namespace Enigmatic.Core
 
             float labelWidth = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = fieldWidth / 2;
+            UnityEngine.Object result = obj;
 
-            UnityEngine.Object result = EditorGUI.ObjectField(fieldRect, new GUIContent(fieldName), obj, objectType, false);
+            try { result = EditorGUI.ObjectField(fieldRect, new GUIContent(fieldName), obj, objectType, false); }
+            catch (Exception e) { }
 
             UpdateLastGUIRect(fieldRect);
 
@@ -1644,22 +1732,54 @@ namespace Enigmatic.Core
         {
             GUI.EndGroup();
 
-            Rect area = zoomendArea.ScaleSize(1 / zoomSacle);
-            area.y += s_WindowTopPadding;// * zoomSacle;
-            ZoomedArea = area;
+            Rect area = zoomendArea.ScaleSizeBy(1 / zoomSacle, zoomendArea.TopLeft());
+            area.y += s_WindowTopPadding;
             GUI.BeginGroup(area);
 
             s_GUIMatrixOrigin = GUI.matrix;
             Matrix4x4 tramslation = Matrix4x4.TRS(area.TopLeft(), Quaternion.identity, Vector3.one);
-            Matrix4x4 scale = Matrix4x4.Scale(new Vector3(zoomSacle, zoomSacle, 0.1f));
+            Matrix4x4 scale = Matrix4x4.Scale(new Vector3(zoomSacle, zoomSacle, 1.0f));
             GUI.matrix = tramslation * scale * tramslation.inverse * GUI.matrix;
         }
 
-        public static void EndZoomedArea(float zoomSacle, Rect windowRect)
+        public static void EndZoomedArea()
         {
             GUI.matrix = s_GUIMatrixOrigin;
             GUI.EndGroup();
             GUI.BeginGroup(new Rect(0.0f, s_WindowTopPadding, Screen.width, Screen.height));
+        }
+
+        public static Vector2 ZoomedAndMoveZoomedArea(Rect zoomedArea, ref float zoomScale, ref Vector2 zoomCordsOrigin)
+        {
+            if (Event.current.type == EventType.ScrollWheel)
+            {
+                float oldZoom = zoomScale;
+                float zoom = zoomScale;
+
+                Vector2 screenCoordsMousePosition = Event.current.mousePosition;
+
+                Vector2 zoomCordsMousePosition = ConvertScreenCoordsToZoomCoords(
+                    screenCoordsMousePosition, EnigmaticGUIUtility.GetActioveWindow().position, zoomScale, zoomCordsOrigin);
+
+                zoom -= 0.1f * zoomScale * Math.Sign(Event.current.delta.y);
+
+                zoomScale = Math.Clamp(zoom, 0.2f, 3f);
+
+                zoomCordsOrigin += (zoomCordsMousePosition - zoomCordsOrigin)
+                    - (oldZoom / zoomScale) * (zoomCordsMousePosition - zoomCordsOrigin);
+
+                Debug.Log(zoomCordsOrigin);
+
+                EnigmaticGUIUtility.Repaint();
+            }
+
+            if (EditorInput.GetMouseDrag(2))
+            {
+                zoomCordsOrigin -= Event.current.delta / zoomScale;
+                EnigmaticGUIUtility.Repaint();
+            }
+
+            return zoomCordsOrigin;
         }
 
         public static Vector2 ConvertScreenCoordsToZoomCoords(Vector2 screenCoords, Rect zoomedArea, float zoomScale, Vector2 zoomCoordsOrigin)
@@ -1696,6 +1816,12 @@ namespace Enigmatic.Core
                 style = new GUIStyle(GUI.skin.box);
 
             GUI.Box(rect, "", style);
+            UpdateLastGUIRect(rect);
+        }
+
+        public static void DrawRect(Rect rect, Color color)
+        {
+            EditorGUI.DrawRect(rect, color);
             UpdateLastGUIRect(rect);
         }
 
@@ -2068,7 +2194,7 @@ namespace Enigmatic.Core
         {
             Event e = Event.current;
 
-            if (rect.Contains(e.mousePosition))
+            if (EnigmaticGUIClip.UnClip(rect).Contains(e.mousePosition))
             {
                 if (e.type == EventType.MouseUp && e.button == mouseButton)
                     return true;
@@ -2127,16 +2253,16 @@ namespace Enigmatic.Core
     {
         private static List<Vector2> sm_ClipedAreas = new List<Vector2>();
 
-        public static void BeginClip(Rect rect)
+        public static Action BeginClip(Rect rect)
         {
             sm_ClipedAreas.Add(rect.position);
-            GUI.BeginClip(rect);
+            return () => GUI.BeginClip(rect);
         }
 
-        public static void EndClip()
+        public static Action EndClip()
         {
             sm_ClipedAreas.Remove(sm_ClipedAreas.Last());
-            GUI.EndClip();
+            return () => GUI.EndClip();
         }
 
         public static Rect UnClip(Rect rect)
@@ -2147,7 +2273,6 @@ namespace Enigmatic.Core
                 result.position += clipedArea;
 
             result.position += rect.position;
-            Debug.Log(0);
             return result;
         }
     }

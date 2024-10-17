@@ -17,7 +17,12 @@ namespace Enigmatic.Core
 
         private static GUIStyle sm_ColumBackground;
         private static GUIStyle sm_ColumBackgroundSelected;
-        private static GUIStyle sm_ToolbarButton;
+        private static GUIStyle sm_ToolBarButton;
+        private static GUIStyle sm_ElementMoveIcon;
+
+        private static GUIStyle sm_FoldoutButtonClose;
+        private static GUIStyle sm_FoldoutButtonOpen;
+        private static GUIStyle sm_FoldoutBackground;
 
         private static Color sm_DarkThemeBlue = new Color(0.227f, 0.447f, 0.690f, 1);
         private static Color sm_AltDarkThemeBlue = new Color(0.2724f, 0.5364f, 0.828f, 1);
@@ -76,16 +81,6 @@ namespace Enigmatic.Core
         private static GUIStyle sm_NodeEditorInspectorWindowIcon;
 
         #endregion
-
-        //Checked ? -----> Trash
-        private static GUIStyle sm_FoldoutButtonClose;
-        private static GUIStyle sm_FoldoutButtonOpen;
-        private static GUIStyle sm_FoldoutBackground;
-
-        private static GUIStyle sm_ToolBarButton; //Delete
-
-        private static GUIStyle sm_AddFoldoutButton; //Check
-
 
         #region Main Property
 
@@ -204,6 +199,23 @@ namespace Enigmatic.Core
                 }
 
                 return sm_ToolBarButton;
+            }
+        }
+
+        public static GUIStyle elementMoveIcon
+        {
+            get
+            {
+                if (sm_ElementMoveIcon == null)
+                {
+                    sm_ElementMoveIcon = new GUIStyle(GUI.skin.box);
+                    sm_ElementMoveIcon.normal.textColor = GUI.skin.label.normal.textColor;
+
+                    sm_ElementMoveIcon.normal.background = EditorGUIUtility.Load(EnigmaticData.GetUnityPath(EnigmaticData
+                        .GetPath(EnigmaticData.textures, "ElementMoveIcon.png"))) as Texture2D;
+                }
+
+                return sm_ElementMoveIcon;
             }
         }
 
@@ -663,23 +675,8 @@ namespace Enigmatic.Core
 
                 return sm_ToolBarButton;
             }
-        } //Delete
-
-        public static GUIStyle addFoldoutButton
-        {
-            get
-            {
-                if (sm_AddFoldoutButton == null)
-                {
-                    sm_AddFoldoutButton = new GUIStyle(GUI.skin.box);
-                    sm_AddFoldoutButton.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/AddButtonFoldout.png") as Texture2D;
-                }
-
-                return sm_AddFoldoutButton;
-            }
         }
 
-        
         public static GUIStyle MultiplyColor(Texture2D texture, Color color)
         {
             Texture2D newTexture = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
