@@ -1653,7 +1653,7 @@ namespace Enigmatic.Core
             UnityEngine.Object result = obj;
 
             try { result = EditorGUI.ObjectField(fieldRect, new GUIContent(fieldName), obj, objectType, false); }
-            catch (Exception e) { }
+            catch (Exception e) { string a = e.ToString(); }
 
             UpdateLastGUIRect(fieldRect);
 

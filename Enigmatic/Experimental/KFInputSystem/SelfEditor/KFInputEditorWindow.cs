@@ -36,7 +36,7 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
             KFInputEditorWindow window = GetWindow<KFInputEditorWindow>();
             window.titleContent = new GUIContent("KFInput Editor");
 
-            //window.maxSize = new Vector2(800, 800);
+            window.maxSize = new Vector2(800, 600);
             window.minSize = new Vector2(800, 600);
 
             window.Show();
