@@ -31,6 +31,10 @@ namespace Enigmatic.Experimental.KFInputSystem
         public static InputMaps LoadEditorMaps()
         {
             KFInputMapContaner contaner = EnigmaticData.LoadResources<KFInputMapContaner>("KFInput/EditorInputSettings");
+
+            if(contaner == null)
+                return null;
+
             var filteredObjects = ENIXFile.FilterObjectsByType(ENIXFile.Deserialize(contaner), new Type[] { typeof(InputMaps) });
             return (InputMaps)filteredObjects[typeof(InputMaps)][0];
         }

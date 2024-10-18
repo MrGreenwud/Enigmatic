@@ -49,6 +49,9 @@ namespace Enigmatic.Experimental.KFInputSystem.Editor
         public void LoadMap()
         {
             m_InputMaps = InputMapResuresManager.LoadEditorMaps();
+
+            if (m_InputMaps == null)
+                m_InputMaps = new InputMaps();
         }
 
         public void ApplyMap()
