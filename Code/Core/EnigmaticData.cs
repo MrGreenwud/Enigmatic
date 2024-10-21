@@ -29,7 +29,7 @@ namespace Enigmatic.Core
         public static readonly string inputMaps = $"{inputStorege}/Maps";
 
         //SearchedTree
-        public static readonly string enigmaticTree = $"{source}/SearchedTree";
+        public static string enigmaticTree => GetFullPath($"{source}/SearchedTree");
         public static readonly string treeStorege = $"{resources}/SearchedTree";
 
         //EditorStyle settings

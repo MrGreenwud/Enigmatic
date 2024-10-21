@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using UnityEngine;
+
+using Enigmatic.Core;
 
 namespace Enigmatic.Experimental.SearchedWindowUtility
 {
@@ -13,10 +16,10 @@ namespace Enigmatic.Experimental.SearchedWindowUtility
 
         public static void CompareAll(SearchedTreeGrup[] grups)
         {
-            if (Directory.Exists(s_Path) == false)
-                Directory.CreateDirectory(s_Path);
+            if (Directory.Exists(EnigmaticData.enigmaticTree) == false)
+                Directory.CreateDirectory(EnigmaticData.enigmaticTree);
 
-            List<string> directores = Directory.GetDirectories(s_Path).ToList();
+            List<string> directores = Directory.GetDirectories(EnigmaticData.enigmaticTree).ToList();
             List<string> existDirectores = new List<string>(directores.Count);
 
             foreach (SearchedTreeGrup grup in grups)
@@ -68,7 +71,7 @@ namespace Enigmatic.Experimental.SearchedWindowUtility
             foreach (string stp in s_STPFils)
             {
                 string grupName = GetGrup(stp);
-                string path = $"{s_Path}/{grupName}";
+                string path = $"{EnigmaticData.enigmaticTree}/{grupName}";
 
                 if (Directory.Exists(path) == false)
                     Directory.CreateDirectory(path);
@@ -81,7 +84,7 @@ namespace Enigmatic.Experimental.SearchedWindowUtility
 
         public static bool TryLoadTree(string grupName, string brenchName, out string stpFile)
         {
-            string path = $"{s_Path}/{grupName}/{brenchName}.stp";
+            string path = $"{EnigmaticData.enigmaticTree}/{grupName}/{brenchName}.stp";
 
             if (File.Exists(path) == false)
             {
@@ -96,12 +99,12 @@ namespace Enigmatic.Experimental.SearchedWindowUtility
 
         public static SearchedTreeGrup[] LoadTrees()
         {
-            if(Directory.Exists(s_Path) == false)
-                Directory.CreateDirectory(s_Path);
+            if(Directory.Exists(EnigmaticData.enigmaticTree) == false)
+                Directory.CreateDirectory(EnigmaticData.enigmaticTree);
 
             List<SearchedTreeGrup> searchedTreeGrups = new List<SearchedTreeGrup>();
 
-            string[] directores = Directory.GetDirectories(s_Path);
+            string[] directores = Directory.GetDirectories(EnigmaticData.enigmaticTree);
 
             foreach (string directory in directores)
             {

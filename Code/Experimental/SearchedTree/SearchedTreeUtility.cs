@@ -62,9 +62,7 @@ namespace Enigmatic.Experimental.SearchedWindowUtility
                 if (EnigmaticGUILayout.Button(value, new Vector2(width / 2, 18), EditorStyles.popup))
                 {
                     Vector2 position = EnigmaticGUILayout.GetLastGUIRect().position + Vector2.one * 36 + Vector2.right * 85;
-
-                    SearchWindow.Open(new SearchWindowContext(GUIUtility
-                        .GUIToScreenPoint(position)), provider);
+                    SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(position)), provider);
                 }
             }
             EnigmaticGUILayout.EndHorizontal();
