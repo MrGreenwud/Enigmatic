@@ -4,43 +4,47 @@ namespace Enigmatic.Core
 {
     public static class RectExtensions
     {
-        /// <summary>
-        /// Scale Rect arount top left pivod
-        /// </summary>
-        public static Rect ScaleSize(this Rect rect, float scale)
-        {
-            return rect.ScaleSize(scale, rect.TopLeft());
-        }
-
-        /// <summary>
-        /// Sacle rect arount pivot
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="scale"></param>
-        /// <param name="pivotPosition"></param>
-        /// <returns></returns>
-        public static Rect ScaleSize(this Rect rect, float scale, Vector2 pivotPosition)
-        {
-            Rect result = rect;
-
-            result.x += pivotPosition.x;
-            result.y += pivotPosition.y;
-
-            result.xMin *= scale;
-            result.xMax *= scale;
-
-            result.yMin *= scale;
-            result.yMax *= scale;
-
-            result.x += pivotPosition.x;
-            result.y += pivotPosition.y;
-
-            return result;
-        }
-
         public static Vector2 TopLeft(this Rect rect)
         {
             return new Vector2(rect.xMin, rect.yMin);
+        }
+
+        public static Rect ScaleSizeBy(this Rect rect, float scale)
+        {
+            return rect.ScaleSizeBy(scale, rect.center);
+        }
+
+        public static Rect ScaleSizeBy(this Rect rect, float scale, Vector2 pivotPoint)
+        {
+            Rect result = rect;
+            result.x -= pivotPoint.x;
+            result.y -= pivotPoint.y;
+            result.xMin *= scale;
+            result.xMax *= scale;
+            result.yMin *= scale;
+            result.yMax *= scale;
+            result.x += pivotPoint.x;
+            result.y += pivotPoint.y;
+            return result;
+        }
+
+        public static Rect ScaleSizeBy(this Rect rect, Vector2 scale)
+        {
+            return rect.ScaleSizeBy(scale, rect.center);
+        }
+
+        public static Rect ScaleSizeBy(this Rect rect, Vector2 scale, Vector2 pivotPoint)
+        {
+            Rect result = rect;
+            result.x -= pivotPoint.x;
+            result.y -= pivotPoint.y;
+            result.xMin *= scale.x;
+            result.xMax *= scale.x;
+            result.yMin *= scale.y;
+            result.yMax *= scale.y;
+            result.x += pivotPoint.x;
+            result.y += pivotPoint.y;
+            return result;
         }
 
         public static bool Overlap(this Rect rect1, Rect rect2)

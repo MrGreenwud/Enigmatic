@@ -1532,10 +1532,6 @@ namespace Enigmatic.Core
     {
         public readonly static Color SelectionColor = new Color(0.6039f, 0.8117f, 1f);
 
-        private readonly static int s_WindowTopPadding = 19;
-
-        private static Matrix4x4 s_GUIMatrixOrigin;
-
         private static Rect sm_LastGUIRect;
 
         public static Rect ZoomedArea { get; private set; }
@@ -1726,65 +1722,6 @@ namespace Enigmatic.Core
         public static void EndZoomedElement()
         {
             GUI.EndGroup();
-        }
-
-        public static void BeginZoomedArea(float zoomSacle, Rect zoomendArea)
-        {
-            GUI.EndGroup();
-
-            Rect area = zoomendArea.ScaleSize(1 / zoomSacle);
-            area.y += s_WindowTopPadding;
-            GUI.BeginGroup(area);
-
-            s_GUIMatrixOrigin = GUI.matrix;
-            Matrix4x4 tramslation = Matrix4x4.TRS(area.TopLeft(), Quaternion.identity, Vector3.one);
-            Matrix4x4 scale = Matrix4x4.Scale(new Vector3(zoomSacle, zoomSacle, 1.0f));
-            GUI.matrix = tramslation * scale * tramslation.inverse * GUI.matrix;
-        }
-
-        public static void EndZoomedArea()
-        {
-            GUI.matrix = s_GUIMatrixOrigin;
-            GUI.EndGroup();
-            GUI.BeginGroup(new Rect(0.0f, s_WindowTopPadding, Screen.width, Screen.height));
-        }
-
-        public static Vector2 ZoomedAndMoveZoomedArea(Rect zoomedArea, ref float zoomScale, ref Vector2 zoomCordsOrigin)
-        {
-            if (Event.current.type == EventType.ScrollWheel)
-            {
-                float oldZoom = zoomScale;
-                float zoom = zoomScale;
-
-                Vector2 screenCoordsMousePosition = Event.current.mousePosition;
-
-                Vector2 zoomCordsMousePosition = ConvertScreenCoordsToZoomCoords(
-                    screenCoordsMousePosition, EnigmaticGUIUtility.GetActioveWindow().position, zoomScale, zoomCordsOrigin);
-
-                zoom -= 0.1f * zoomScale * Math.Sign(Event.current.delta.y);
-
-                zoomScale = Math.Clamp(zoom, 0.2f, 3f);
-
-                zoomCordsOrigin += (zoomCordsMousePosition - zoomCordsOrigin)
-                    - (oldZoom / zoomScale) * (zoomCordsMousePosition - zoomCordsOrigin);
-
-                Debug.Log(zoomCordsOrigin);
-
-                EnigmaticGUIUtility.Repaint();
-            }
-
-            if (EditorInput.GetMouseDrag(2))
-            {
-                zoomCordsOrigin -= Event.current.delta / zoomScale;
-                EnigmaticGUIUtility.Repaint();
-            }
-
-            return zoomCordsOrigin;
-        }
-
-        public static Vector2 ConvertScreenCoordsToZoomCoords(Vector2 screenCoords, Rect zoomedArea, float zoomScale, Vector2 zoomCoordsOrigin)
-        {
-            return (screenCoords - zoomedArea.TopLeft()) / zoomScale + zoomCoordsOrigin;
         }
 
         public static float DrawFloatField(string fieldName, float value, float space = 3)
@@ -2553,6 +2490,71 @@ namespace Enigmatic.Core
 
             ESerializedProperty property = new ESerializedProperty("Element 0", Instance, elementType, value);
             return property;
+        }
+    }
+
+    public static class EditorAreaZoomer
+    {
+        private readonly static int s_WindowTopPadding = 20;
+
+        private static Matrix4x4 s_GUIMatrixOrigin;
+
+        public static void BeginZoomedArea(float zoomScale, Rect zoomendArea)
+        {
+            GUI.EndGroup();
+
+            Rect clippedArea = zoomendArea.ScaleSizeBy(1.0f / zoomScale, zoomendArea.TopLeft());
+            clippedArea.y += s_WindowTopPadding;
+            GUI.BeginGroup(clippedArea);
+
+            s_GUIMatrixOrigin = GUI.matrix;
+            Matrix4x4 translation = Matrix4x4.TRS(clippedArea.TopLeft(), Quaternion.identity, Vector3.one);
+            Matrix4x4 scale = Matrix4x4.Scale(new Vector3(zoomScale, zoomScale, 1.0f));
+            GUI.matrix = translation * scale * translation.inverse * GUI.matrix;
+        }
+
+        public static void EndZoomedArea()
+        {
+            GUI.matrix = s_GUIMatrixOrigin;
+            GUI.EndGroup();
+            GUI.BeginGroup(new Rect(0.0f, s_WindowTopPadding, Screen.width, Screen.height));
+        }
+
+        public static Vector2 ZoomedAndMoveZoomedArea(Rect zoomedArea, ref float zoomScale, ref Vector2 zoomCordsOrigin)
+        {
+            if (Event.current.type == EventType.ScrollWheel)
+            {
+                float oldZoom = zoomScale;
+                float zoom = zoomScale;
+
+                Vector2 screenCoordsMousePosition = Event.current.mousePosition;
+
+                Vector2 zoomCordsMousePosition = ConvertScreenCoordsToZoomCoords(
+                    screenCoordsMousePosition, EnigmaticGUIUtility.GetActioveWindow().position, zoomScale, zoomCordsOrigin);
+
+                zoom -= 0.1f * zoomScale * Math.Sign(Event.current.delta.y);
+
+                zoomScale = Math.Clamp(zoom, 0.2f, 3f);
+
+                zoomCordsOrigin += (zoomCordsMousePosition - zoomCordsOrigin)
+                    - (oldZoom / zoomScale) * (zoomCordsMousePosition - zoomCordsOrigin);
+
+                EnigmaticGUIUtility.Repaint();
+            }
+
+            if (EditorInput.GetMouseDrag(2))
+            {
+                zoomCordsOrigin -= Event.current.delta / zoomScale;
+                EnigmaticGUIUtility.Repaint();
+            }
+
+            return zoomCordsOrigin;
+        }
+
+        public static Vector2 ConvertScreenCoordsToZoomCoords(Vector2 screenCoords, 
+            Rect zoomedArea, float zoomScale, Vector2 zoomCoordsOrigin)
+        {
+            return (screenCoords - zoomedArea.TopLeft()) / zoomScale + zoomCoordsOrigin;
         }
     }
 }

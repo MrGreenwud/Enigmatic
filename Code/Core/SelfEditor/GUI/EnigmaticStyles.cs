@@ -109,7 +109,7 @@ namespace Enigmatic.Core
                 if (sm_ArrowRightIcon == null)
                 {
                     sm_ArrowRightIcon = new GUIStyle(GUI.skin.box);
-                    sm_ArrowRightIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/ArrowRight.png") as Texture2D;
+                    sm_ArrowRightIcon.normal.background = EnigmaticData.LoadEditorTexture("ArrowRight.png") as Texture2D;
                 }
 
                 return sm_ArrowRightIcon;
@@ -123,7 +123,7 @@ namespace Enigmatic.Core
                 if (sm_AddButton == null)
                 {
                     sm_AddButton = new GUIStyle(GUI.skin.box);
-                    sm_AddButton.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/AddButton.png") as Texture2D;
+                    sm_AddButton.normal.background = EnigmaticData.LoadEditorTexture("AddButton.png") as Texture2D;
                 }
 
                 return sm_AddButton;
@@ -137,7 +137,7 @@ namespace Enigmatic.Core
                 if (sm_SubstractButton == null)
                 {
                     sm_SubstractButton = new GUIStyle(GUI.skin.box);
-                    sm_SubstractButton.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/SubstractButton.png") as Texture2D;
+                    sm_SubstractButton.normal.background = EnigmaticData.LoadEditorTexture("SubstractButton.png") as Texture2D;
                 }
 
                 return sm_SubstractButton;
@@ -153,9 +153,7 @@ namespace Enigmatic.Core
                     sm_ColumBackground = new GUIStyle(GUI.skin.box);
                     sm_ColumBackground.normal.textColor = GUI.skin.label.normal.textColor;
 
-                    //sm_ColumBackground.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/ColumBackground.png") as Texture2D;
-                    sm_ColumBackground.normal.background = EditorGUIUtility.Load(EnigmaticData.GetUnityPath(EnigmaticData.GetPath
-                        (EnigmaticData.textures, "ColumBackground.png"))) as Texture2D;
+                    sm_ColumBackground.normal.background = EnigmaticData.LoadEditorTexture("ColumBackground.png");
 
                     sm_ColumBackground.border = new RectOffset(4, 4, 4, 4); // Регулируйте отступы, чтобы избежать обрезания текста
                     sm_ColumBackground.padding = new RectOffset(2, 2, 2, 2); // Регулируйте отступы, чтобы избежать обрезания текста
@@ -174,8 +172,7 @@ namespace Enigmatic.Core
                     sm_ColumBackgroundSelected = new GUIStyle(GUI.skin.box);
                     sm_ColumBackgroundSelected.normal.textColor = GUI.skin.label.normal.textColor;
 
-                    sm_ColumBackgroundSelected.normal.background = EditorGUIUtility.Load(EnigmaticData.GetUnityPath(EnigmaticData
-                        .GetPath(EnigmaticData.textures, "ColumBackgroundSelected.png"))) as Texture2D;
+                    sm_ColumBackgroundSelected.normal.background = EnigmaticData.LoadEditorTexture("ColumBackgroundSelected.png");
 
                     sm_ColumBackgroundSelected.border = new RectOffset(4, 4, 4, 4); // Регулируйте отступы, чтобы избежать обрезания текста
                     sm_ColumBackgroundSelected.padding = new RectOffset(2, 2, 2, 2); // Регулируйте отступы, чтобы избежать обрезания текста
@@ -211,8 +208,7 @@ namespace Enigmatic.Core
                     sm_ElementMoveIcon = new GUIStyle(GUI.skin.box);
                     sm_ElementMoveIcon.normal.textColor = GUI.skin.label.normal.textColor;
 
-                    sm_ElementMoveIcon.normal.background = EditorGUIUtility.Load(EnigmaticData.GetUnityPath(EnigmaticData
-                        .GetPath(EnigmaticData.textures, "ElementMoveIcon.png"))) as Texture2D;
+                    sm_ElementMoveIcon.normal.background = EnigmaticData.LoadEditorTexture("ElementMoveIcon.png");
                 }
 
                 return sm_ElementMoveIcon;
@@ -233,7 +229,7 @@ namespace Enigmatic.Core
                 if (sm_ErrorIcon == null)
                 {
                     sm_ErrorIcon = new GUIStyle(GUI.skin.box);
-                    sm_ErrorIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/ErrorIcon.png") as Texture2D;
+                    sm_ErrorIcon.normal.background = EnigmaticData.LoadEditorTexture("ErrorIcon.png");
                 }
 
                 return sm_ErrorIcon;
@@ -294,7 +290,7 @@ namespace Enigmatic.Core
                 if (sm_GameObjectIcon == null)
                 {
                     sm_GameObjectIcon = new GUIStyle(GUI.skin.box);
-                    sm_GameObjectIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/GameObject.png") as Texture2D;
+                    sm_GameObjectIcon.normal.background = EnigmaticData.LoadEditorTexture("GameObject.png");
                 }
 
                 return sm_GameObjectIcon;
@@ -325,7 +321,7 @@ namespace Enigmatic.Core
                 if (sm_LightIcon == null)
                 {
                     sm_LightIcon = new GUIStyle(GUI.skin.box);
-                    sm_LightIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/Light.png") as Texture2D;
+                    sm_LightIcon.normal.background = EnigmaticData.LoadEditorTexture("Light.png") as Texture2D;
                 }
 
                 return sm_LightIcon;
@@ -339,7 +335,7 @@ namespace Enigmatic.Core
                 if (sm_LayersIcon == null)
                 {
                     sm_LayersIcon = new GUIStyle(GUI.skin.box);
-                    sm_LayersIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/Layers.png") as Texture2D;
+                    sm_LayersIcon.normal.background = EnigmaticData.LoadEditorTexture("Layers.png") as Texture2D;
                 }
 
                 return sm_LayersIcon;
@@ -353,7 +349,7 @@ namespace Enigmatic.Core
                 if (sm_TagIcon == null)
                 {
                     sm_TagIcon = new GUIStyle(GUI.skin.box);
-                    sm_TagIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/Tag.png") as Texture2D;
+                    sm_TagIcon.normal.background = EnigmaticData.LoadEditorTexture("Tag.png") as Texture2D;
                 }
 
                 return sm_TagIcon;
@@ -367,7 +363,7 @@ namespace Enigmatic.Core
                 if (sm_FolderIcon == null)
                 {
                     sm_FolderIcon = new GUIStyle();
-                    sm_FolderIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/BaseFoldor.png") as Texture2D;
+                    sm_FolderIcon.normal.background = EnigmaticData.LoadEditorTexture("BaseFoldor.png") as Texture2D;
                 }
 
                 return sm_FolderIcon;
@@ -381,7 +377,7 @@ namespace Enigmatic.Core
                 if (sm_TreeHierarchy == null)
                 {
                     sm_TreeHierarchy = new GUIStyle();
-                    sm_TreeHierarchy.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/TreeHierarchy.png") as Texture2D;
+                    sm_TreeHierarchy.normal.background = EnigmaticData.LoadEditorTexture("TreeHierarchy.png") as Texture2D;
                 }
 
                 return sm_TreeHierarchy;
@@ -395,7 +391,7 @@ namespace Enigmatic.Core
                 if (sm_TreeHierarchyContinue == null)
                 {
                     sm_TreeHierarchyContinue = new GUIStyle();
-                    sm_TreeHierarchyContinue.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/TreeHierarchyContinue.png") as Texture2D;
+                    sm_TreeHierarchyContinue.normal.background = EnigmaticData.LoadEditorTexture("TreeHierarchyContinue.png") as Texture2D;
                 }
 
                 return sm_TreeHierarchyContinue;
@@ -409,7 +405,7 @@ namespace Enigmatic.Core
                 if (sm_TreeHierarchyEnd == null)
                 {
                     sm_TreeHierarchyEnd = new GUIStyle();
-                    sm_TreeHierarchyEnd.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/TreeHierarchyEnd.png") as Texture2D;
+                    sm_TreeHierarchyEnd.normal.background = EnigmaticData.LoadEditorTexture("TreeHierarchyEnd.png") as Texture2D;
                 }
 
                 return sm_TreeHierarchyEnd;
@@ -524,7 +520,7 @@ namespace Enigmatic.Core
                 if (sm_Port == null)
                 {
                     sm_Port = new GUIStyle();
-                    sm_Port.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/Port.png") as Texture2D;
+                    sm_Port.normal.background = EnigmaticData.LoadEditorTexture("Port.png");
                 }
 
                 return sm_Port;
@@ -538,7 +534,7 @@ namespace Enigmatic.Core
                 if (sm_InputDataIcon == null)
                 {
                     sm_InputDataIcon = new GUIStyle();
-                    sm_InputDataIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/InputData.png") as Texture2D;
+                    sm_InputDataIcon.normal.background = EnigmaticData.LoadEditorTexture("InputData.png");
                 }
 
                 return sm_InputDataIcon;
@@ -552,7 +548,7 @@ namespace Enigmatic.Core
                 if (sm_OutputDataIcon == null)
                 {
                     sm_OutputDataIcon = new GUIStyle();
-                    sm_OutputDataIcon.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/OutputData.png") as Texture2D;
+                    sm_OutputDataIcon.normal.background = EnigmaticData.LoadEditorTexture("OutputData.png");
                 }
 
                 return sm_OutputDataIcon;
@@ -566,7 +562,7 @@ namespace Enigmatic.Core
                 if (sm_Parametor == null)
                 {
                     sm_Parametor = new GUIStyle();
-                    sm_Parametor.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/Parametor.png") as Texture2D;
+                    sm_Parametor.normal.background = EnigmaticData.LoadEditorTexture("Parametor.png");
                 }
 
                 return sm_Parametor;
@@ -624,7 +620,7 @@ namespace Enigmatic.Core
                 if (sm_FoldoutButtonClose == null)
                 {
                     sm_FoldoutButtonClose = new GUIStyle(GUI.skin.box);
-                    sm_FoldoutButtonClose.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/FoldoutButtonClose.png") as Texture2D;
+                    sm_FoldoutButtonClose.normal.background = EnigmaticData.LoadEditorTexture("FoldoutButtonClose.png");
                 }
 
                 return sm_FoldoutButtonClose;
@@ -638,7 +634,7 @@ namespace Enigmatic.Core
                 if (sm_FoldoutButtonOpen == null)
                 {
                     sm_FoldoutButtonOpen = new GUIStyle(GUI.skin.box);
-                    sm_FoldoutButtonOpen.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/FoldoutButtonOpen.png") as Texture2D;
+                    sm_FoldoutButtonOpen.normal.background = EnigmaticData.LoadEditorTexture("FoldoutButtonOpen.png");
                 }
 
                 return sm_FoldoutButtonOpen;
@@ -652,7 +648,7 @@ namespace Enigmatic.Core
                 if (sm_FoldoutBackground == null)
                 {
                     sm_FoldoutBackground = new GUIStyle(GUI.skin.box);
-                    sm_FoldoutBackground.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/FoldoutBackground.png") as Texture2D;
+                    sm_FoldoutBackground.normal.background = EnigmaticData.LoadEditorTexture("FoldoutBackground.png") as Texture2D;
                     sm_FoldoutBackground.border = new RectOffset(9, 9, 9, 9); // Регулируйте отступы, чтобы избежать обрезания текста
                     sm_FoldoutBackground.padding = new RectOffset(7, 7, 7, 7);
                 }
@@ -668,7 +664,7 @@ namespace Enigmatic.Core
                 if (sm_ToolBarButton == null)
                 {
                     sm_ToolBarButton = new GUIStyle(GUI.skin.box);
-                    sm_ToolBarButton.normal.background = EditorGUIUtility.Load("Assets/Enigmatic/Source/Editor/Texture/ToolBarButton.png") as Texture2D;
+                    sm_ToolBarButton.normal.background = EnigmaticData.LoadEditorTexture("ToolBarButton.png");
                     sm_ToolBarButton.border = new RectOffset(17, 17, 2, 2); // Регулируйте отступы, чтобы избежать обрезания текста
                     sm_ToolBarButton.padding = new RectOffset(6, 6, 6, 6);
                 }

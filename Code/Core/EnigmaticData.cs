@@ -10,9 +10,11 @@ namespace Enigmatic.Core
 {
     public static class EnigmaticData
     {
+        public static readonly string main = $"Enigmatic";
+
         public static readonly string resources = $"Resources/Enigmatic";
         public static readonly string resourcesEditor = $"{resources}/Editor";
-        public static readonly string source = $"Enigmatic/Source";
+        public static readonly string source = $"{main}/Source";
 
         //Editor
         public static readonly string textures = $"{source}/Editor/Texture";
@@ -97,6 +99,16 @@ namespace Enigmatic.Core
         public static T LoadResources<T>(string path) where T : UnityEngine.Object
         {
             return Resources.Load<T>($"Enigmatic/{path}");
+        }
+
+        public static Texture2D LoadEditorTexture(string fileName, string additionalPath = "")
+        {
+            return LoadEditorResources(GetUnityPath($"{textures}/{additionalPath}/{fileName}")) as Texture2D;
+        }
+
+        public static UnityEngine.Object LoadEditorResources(string path)
+        {
+            return EditorGUIUtility.Load(path);
         }
     }
 }
