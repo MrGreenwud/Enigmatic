@@ -4,7 +4,7 @@ namespace Enigmatic.Experimental.TimerControl
 {
     internal static class TimerInitializer
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Load()
         {
             TimerManager.Clear();

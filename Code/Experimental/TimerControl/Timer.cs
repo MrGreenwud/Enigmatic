@@ -26,7 +26,7 @@ namespace Enigmatic.Experimental.TimerControl
         public Timer(float time, bool isLooped = false)
         {
             Time = time;
-            IsFinished = true;
+            IsFinished = false;
             IsLooped = isLooped;
         }
 
